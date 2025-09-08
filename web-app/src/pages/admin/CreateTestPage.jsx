@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AdminLayout from '../../layouts/admin/AdminLayout';
+import AdminLayout from '../../layouts/AdminLayout';
 import { Button, Card, Form, Input, Progress, Select, Upload } from 'antd';
 import {
 
@@ -11,6 +11,7 @@ import {
 import TextArea from 'antd/es/input/TextArea';
 import { FaFileExcel } from "react-icons/fa";
 import { HiSpeakerWave } from "react-icons/hi2";
+import UploadDragger from '../../components/admin/UploadDragger';
 
 const CreateTestPage = () => {
     const [form] = Form.useForm();
@@ -45,47 +46,12 @@ const CreateTestPage = () => {
                     <div className="grid grid-cols-2 gap-6 my-6">
                         <div>
                             <p className="draggerTittle"><FaFileExcel className='text-green-600 text-lg' />File câu hỏi (Excel)</p>
-                            <Card className="uploadFrame">
-                                <Upload.Dragger
-                                    accept=".xls,.xlsx"
-                                    maxCount={1}
-                                    beforeUpload={() => false}
-                                    className="!h-64 w-full !flex !flex-col !justify-center !items-center"
-                                >
-                                    <p className="ant-upload-drag-icon w-24 h-24 !flex !items-center !justify-center p-4 bg-green-100 rounded-[50%]">
-                                        <FaFileExcel className='text-green-600 text-4xl' />
-                                    </p>
-                                    <p className='text-xl font-[400]'>Kéo thả file Excel vào đây</p>
-                                    <span>hoặc <span className='text-blue-400'>chọn file</span></span>
-                                    <p className="text-gray-400 text-xs mt-2">
-                                        Hỗ trợ .xlsx, .xls (tối đa 10MB)
-                                    </p>
-                                </Upload.Dragger>
-
-                            </Card>
+                            <UploadDragger type={"Excel"} />
                         </div>
 
                         <div>
                             <p className="draggerTittle">  <HiSpeakerWave className='text-blue-600 text-xl' />File âm thanh (Tùy chọn)</p>
-                            <Card className="uploadFrame">
-
-                                <Upload.Dragger
-                                    accept=".mp3,.wav,.m4a"
-                                    maxCount={1}
-                                    beforeUpload={() => false}
-                                    className="!h-64 w-full !flex !flex-col !justify-center !items-center"
-                                >
-                                    <p className="ant-upload-drag-icon w-24 h-24 !flex !items-center !justify-center p-4 bg-blue-100 rounded-[50%]">
-                                        <HiSpeakerWave className='text-blue-600 text-4xl' />
-                                    </p>
-                                    <p className='text-xl font-[400]'>Kéo thả file âm thanh vào đây</p>
-                                    <span>hoặc <span className='text-blue-400'>chọn file</span></span>
-                                    <p className="text-gray-400 text-xs mt-2">
-                                        Hỗ trợ .mp3, .wav, .m4a (tối đa 50MB)
-                                    </p>
-                                </Upload.Dragger>
-
-                            </Card>
+                            <UploadDragger type={"Audio"} />
                         </div>
 
                     </div>

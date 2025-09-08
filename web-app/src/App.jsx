@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AdminLayout from './layouts/admin/AdminLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 
 import AuthLayout from './layouts/AuthLayout';
