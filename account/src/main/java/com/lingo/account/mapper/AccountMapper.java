@@ -22,7 +22,7 @@ public class AccountMapper {
 
     account.setKeycloakId(keycloakId);
 
-    account.setId(null);
+    account.setEnable(true);
 
     return account;
   }

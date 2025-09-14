@@ -1,18 +1,24 @@
 import { useState } from 'react'
 import './App.css'
+import './styles/antStyle.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AdminLayout from './layouts/AdminLayout';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 import AuthLayout from './layouts/AuthLayout';
-import LoginPage from './pages/LoginPage';
 import ClientLayout from './layouts/ClientLayout';
 import HomePage from './pages/HomePage';
 import CreateTestPage from './pages/admin/CreateTestPage';
 import UserPage from './pages/admin/UserPage';
 import TestPage from './pages/admin/TestPage';
 import DashboardPage from './pages/admin/DashboardPage';
-import RegistrationPage from './pages/admin/RegisterPage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import ForgetPage from './pages/auth/ForgetPage';
+import ResetPage from './pages/auth/ResetPage';
+import { ToastContainer } from 'react-toastify';
 function App() {
 
   const router = createBrowserRouter([
@@ -50,7 +56,15 @@ function App() {
         },
         {
           path: "register",
-          element: <RegistrationPage />,
+          element: <RegisterPage />,
+        },
+        {
+          path: "forget",
+          element: <ForgetPage />,
+        },
+        {
+          path: "reset",
+          element: <ResetPage />,
         }
       ],
     },
@@ -69,6 +83,16 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </>
   );
 }

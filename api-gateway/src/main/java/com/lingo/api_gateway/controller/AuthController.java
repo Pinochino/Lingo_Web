@@ -4,6 +4,7 @@ import com.lingo.api_gateway.dto.identity.ReqAccountDTO;
 import com.lingo.api_gateway.dto.identity.ReqTokenRefreshDTO;
 import com.lingo.api_gateway.dto.identity.TokenExchangeResponse;
 import com.lingo.api_gateway.service.AuthService;
+import com.lingo.common_library.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -23,7 +24,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  ResponseEntity<TokenExchangeResponse> login(@RequestBody ReqAccountDTO dto){
+  ResponseEntity<TokenExchangeResponse> login(@RequestBody ReqAccountDTO dto) throws NotFoundException {
     log.info("login: {}", dto);
     TokenExchangeResponse res = authService.loginAccount(dto);
 

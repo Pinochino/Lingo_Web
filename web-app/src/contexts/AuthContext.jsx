@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -57,9 +58,11 @@ export const AuthProvider = ({ children }) => {
       setUser(userInfo.data);
       localStorage.setItem('user_name', userInfo.data.name);
       setIsAuthenticated(true);
+      toast.info("Đăng nhập thành công")
       return true;
     } catch (err) {
-      console.log("Login failed with error: " + err);
+      console.log("Login failed with error: ", err?.message);
+      toast.error(err?.response?.data?.detail);
       return false;
     }
     finally {
@@ -76,10 +79,12 @@ export const AuthProvider = ({ children }) => {
         `http://localhost:8080/api/v1/account`,
         userData
       )
+      toast.info("Đăng ký tài khoản thành công")
       return true;
 
     } catch (err) {
       console.error("Error when creating new account:" + err);
+      toast.error(err?.response?.data?.detail);
       return false;
     } finally {
       setLoading(false);

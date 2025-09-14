@@ -1,6 +1,8 @@
 package com.lingo.api_gateway.service;
 
 import com.lingo.api_gateway.dto.identity.*;
+import com.lingo.api_gateway.utils.Constants;
+import com.lingo.common_library.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +23,16 @@ public class AuthService {
   @NonFinal
   String clientSecret;
 
-  public TokenExchangeResponse loginAccount(ReqAccountDTO request) {
+  public TokenExchangeResponse loginAccount(ReqAccountDTO request) throws NotFoundException{
     log.info("loginAccount: {}", request);
     try {
       TokenExchangeResponse res = this.authenClient.exchangeClientToken(
               new TokenExchangeRequest("password", clientId, clientSecret,
                       "openid", request.getUsername(), request.getPassword()));
-
-
       return res;
     } catch (Exception e) {
       log.error("loginAccount error: {}", e.getMessage());
-      return null;
+      throw new NotFoundException(Constants.ErrorCode.LOGIN_NOT_SUCCESS);
     }
   }
 
@@ -45,9 +45,9 @@ public class AuthService {
                       clientId, clientSecret, refreshToken));
 
       return res;
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       log.error("loginAccount error: {}", e.getMessage());
-      return null;
+      throw new RuntimeException(Constants.ErrorCode.LOGIN_NOT_SUCCESS);
     }
   }
 

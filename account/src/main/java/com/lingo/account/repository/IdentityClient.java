@@ -7,9 +7,7 @@ import feign.QueryMap;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "identity-service", url = "${idp.url}")
 public interface IdentityClient {
@@ -22,4 +20,7 @@ public interface IdentityClient {
 
   @PostMapping(value = "/admin/realms/Lingo/users", consumes = MediaType.APPLICATION_JSON_VALUE)
   ResponseEntity<?> createAccount(@RequestHeader("authorization") String token, @RequestBody ReqAccount param);
+
+  @DeleteMapping(value = "/admin/realms/Lingo/users/{userId}")
+  ResponseEntity<?> deleteAccount(@RequestHeader("authorization") String token, @PathVariable String userId);
 }

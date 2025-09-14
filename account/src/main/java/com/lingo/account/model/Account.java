@@ -18,7 +18,7 @@ public class Account {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "keycloak_id", unique = true, nullable = false, length = 36)
+  @Column(name = "keycloak_id", unique = true)
   private String keycloakId;
 
   @Column(unique = true, nullable = false)
@@ -33,10 +33,7 @@ public class Account {
   @Column(name = "last_name")
   private String lastName;
 
-//  @Column(name = "dob")
-//  private LocalDate dob;
-
-  @Column(nullable = false)
-  private String name;
+  @Column(name = "enable")
+  private boolean enable;
 
 }
