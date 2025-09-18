@@ -1,8 +1,6 @@
 import { Button, Card, Select, Space, Tag, Typography, Input, Avatar } from "antd"
 import Brc from "../BreadCum"
-import Header from "./ScratchHeader"
 import { BookFilled, BulbFilled, CaretRightFilled, ClockCircleFilled, ClockCircleOutlined, CommentOutlined, CustomerServiceOutlined, DislikeFilled, ExclamationCircleOutlined, EyeFilled, HeartOutlined, LikeFilled, PlayCircleFilled, QuestionCircleFilled, QuestionCircleOutlined, ReadFilled, ReadOutlined, ShareAltOutlined, StarFilled, TeamOutlined, ThunderboltOutlined, UnorderedListOutlined, UserOutlined, WechatFilled } from '@ant-design/icons';
-import SingleComment from "../../components/tests/SingleComment";
 import BoxComment from "../../components/tests/BoxComment";
 import RightSider from "../../components/tests/RightSider";
 
@@ -12,8 +10,6 @@ const BeforeTestPage = () => {
 
   return (
     <div className="bg-gray-50">
-
-      <Header />
 
       {/* breadcumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

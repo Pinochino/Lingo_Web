@@ -25,7 +25,7 @@ const BoxComment = () => {
           dislikes: 0,
           replies: [
             {
-              id: 2,
+              id: 3,
               author: "Nguyễn Văn A",
               time: "1 giờ trước",
               content: "Mình cũng thấy vậy!",
@@ -36,7 +36,7 @@ const BoxComment = () => {
           ]
         },
         {
-          id: 2,
+          id: 4,
           author: "Nguyễn Văn A",
           time: "1 giờ trước",
           content: "Mình cũng thấy vậy!",
@@ -44,7 +44,7 @@ const BoxComment = () => {
           dislikes: 0,
           replies: [
             {
-              id: 2,
+              id: 5,
               author: "Nguyễn Văn A",
               time: "1 giờ trước",
               content: "Mình cũng thấy vậy!",

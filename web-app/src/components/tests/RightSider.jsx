@@ -3,6 +3,22 @@ import { CustomerServiceOutlined, StarFilled, UserOutlined } from '@ant-design/i
 
 
 const RightSider = () => {
+
+  const Recommend = (content) => {
+    return (
+      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+          <CustomerServiceOutlined className=" !text-blue-600" />
+        </div>
+        <div className="flex-1">
+          <div className="font-medium text-sm">TOEIC Listening Test 2</div>
+          <div className="text-xs text-gray-600">Phù hợp với trình độ của bạn</div>
+        </div>
+      </div>
+    )
+  }
+
+
   return (
     <>
       <Card className="!shadow-lg !pb-3">
@@ -48,15 +64,9 @@ const RightSider = () => {
       <Card className="!shadow-lg !pb-3 !mt-7">
         <h3 className="text-base font-semibold text-gray-900 mb-4">Đề xuất cho bạn</h3>
         <div className="space-y-3">
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <CustomerServiceOutlined className=" !text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <div className="font-medium text-sm">TOEIC Listening Test 2</div>
-              <div className="text-xs text-gray-600">Phù hợp với trình độ của bạn</div>
-            </div>
-          </div>
+          {[...Array(3)].map((_, i) => (
+            <Recommend key={i} />
+          ))}
         </div>
       </Card>
     </>
