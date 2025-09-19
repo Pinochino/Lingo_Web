@@ -1,10 +1,11 @@
 import React from 'react';
+import TimeFrame from '../../components/client/test/TimeFrame';
 
 const HavingTestPage = () => {
     return (
-        <div>
-
-        </div>
+        <>
+            <TimeFrame />
+        </>
     );
 };
 
