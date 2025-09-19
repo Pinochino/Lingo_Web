@@ -12,7 +12,13 @@ import CreateTestPage from './pages/admin/CreateTestPage';
 import UserPage from './pages/admin/UserPage';
 import TestPage from './pages/admin/TestPage';
 import DashboardPage from './pages/admin/DashboardPage';
+
 import HavingTestPage from './pages/client/HavingTestPage';
+
+import ListTestsPage from './pages/tests/ListTestsPage';
+import BeforeTestPage from './pages/tests/BeforeTestPage';
+import AfterTestPage from './pages/tests/AfterTestPage';
+
 function App() {
 
   const router = createBrowserRouter([
@@ -59,6 +65,7 @@ function App() {
           element: <HomePage />,
         },
         {
+
           path: "test",
           children: [
             {
@@ -75,6 +82,15 @@ function App() {
             }
           ]
         }
+
+          path: "tests/:id/:name",
+          element: <BeforeTestPage />,
+        },
+        {
+          path: "tests/:id/:name/results",
+          element: <AfterTestPage />,
+        },
+
       ],
     },
   ]);
