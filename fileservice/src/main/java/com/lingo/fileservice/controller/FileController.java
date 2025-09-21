@@ -37,7 +37,7 @@ public class FileController {
 
     @PostMapping("/uploadMany")
     public ResponseEntity<List<FileResponse>> uploadMultipleFiles(
-            @RequestParam(name = "files", required = false) List<MultipartFile> files,
+            @RequestParam(name = "files", required = false) MultipartFile[] files,
             @RequestParam("testTitle") String testTitle)
             throws IOException {
         List<FileResponse> response = fileService.uploadMultipleFiles(files, testTitle);

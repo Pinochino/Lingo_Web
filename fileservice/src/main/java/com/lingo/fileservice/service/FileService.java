@@ -3,6 +3,7 @@ package com.lingo.fileservice.service;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public interface FileService {
         FileResponse uploadSingleFile(MultipartFile file, String testTitle)
                         throws IOException;
 
-        List<FileResponse> uploadMultipleFiles(List<MultipartFile> files, String testTitle) throws IOException;
+        List<FileResponse> uploadMultipleFiles(MultipartFile[] files, String testTitle) throws IOException;
 
 }
 
@@ -142,8 +143,9 @@ class FileServiceImpl implements FileService {
         }
 
         @Override
-        public List<FileResponse> uploadMultipleFiles(List<MultipartFile> files, String testTitle) {
-                List<FileResponse> responses = files.stream().map(file -> {
+        public List<FileResponse> uploadMultipleFiles(MultipartFile[] files, String testTitle) {
+
+                List<FileResponse> responses = Arrays.stream(files).map(file -> {
                         try {
                                 return uploadSingleFile(file, testTitle);
                         } catch (IOException e) {
