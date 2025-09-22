@@ -3,7 +3,7 @@ import Brc from "../BreadCum"
 import { BookFilled, BulbFilled, CaretRightFilled, ClockCircleFilled, ClockCircleOutlined, CommentOutlined, CustomerServiceOutlined, DislikeFilled, ExclamationCircleOutlined, EyeFilled, HeartOutlined, LikeFilled, PlayCircleFilled, QuestionCircleFilled, QuestionCircleOutlined, ReadFilled, ReadOutlined, ShareAltOutlined, StarFilled, TeamOutlined, ThunderboltOutlined, UnorderedListOutlined, UserOutlined, WechatFilled } from '@ant-design/icons';
 import BoxComment from "../../components/tests/BoxComment";
 import RightSider from "../../components/tests/RightSider";
-
+import HistoryAttempts from "../../components/tests/BeforePage/HistoryAttempts";
 
 const BeforeTestPage = () => {
   const { Text } = Typography;
@@ -25,6 +25,7 @@ const BeforeTestPage = () => {
             {/* action */}
 
             <Card className="!shadow-lg !pb-3">
+
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <div className="flex items-center space-x-2 mb-2">
@@ -57,6 +58,8 @@ const BeforeTestPage = () => {
                 </Button>
               </div>
 
+              <HistoryAttempts />
+
               <Card className="!bg-gradient-to-r !from-blue-50 !to-indigo-50">
                 <div className="flex items-center justify-between">
                   <div>
@@ -81,10 +84,10 @@ const BeforeTestPage = () => {
                 {/* <Tag icon={<ExclamationCircleOutlined />} color="warning" className="!mt-4 !py-2 !pr-3 !text-base text-nowrap">
                   <strong>Lưu ý:</strong> Hãy chuẩn bị đầy đủ 75 phút để hoàn thành bài thi. Bạn có thể tạm dừng và tiếp tục sau.
                 </Tag> */}
-                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <div class="flex items-center gap-1">
+                <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-center gap-1">
                     <BulbFilled className="!text-yellow-600" />
-                    <div class="text-sm text-yellow-800">
+                    <div className="text-sm text-yellow-800">
                       <strong>Lưu ý:</strong> Hãy chuẩn bị đầy đủ 75 phút để hoàn thành bài thi. Bạn có thể tạm dừng và tiếp tục sau.
                     </div>
                   </div>

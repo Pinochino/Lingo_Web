@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setStatus } from "../../../slice/testListSlice";
 
 const FilterTab = ({ handleNavigate }) => {
-  const active = useSelector((state) => state.list.status);
+  const active = useSelector((state) => state.tests.status);
   const dispatch = useDispatch()
 
   const handleStatus = (value) => {

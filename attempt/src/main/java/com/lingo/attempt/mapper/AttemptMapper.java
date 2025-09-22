@@ -1,6 +1,7 @@
 package com.lingo.attempt.mapper;
 
 import com.lingo.attempt.dto.ResAttemptDTO;
+import com.lingo.attempt.dto.ResAttemptShortDTO;
 import com.lingo.attempt.model.Attempt;
 import com.lingo.attempt.model.UserAnswers;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,10 @@ public class AttemptMapper {
   public ResAttemptDTO.Answers toResAnswerDTO(UserAnswers userAnswers){
     if (userAnswers == null) return null;
     return modelMapper.map(userAnswers, ResAttemptDTO.Answers.class);
+  }
+
+  public ResAttemptShortDTO toResAttemptShortDTO(Attempt attempt){
+    if (attempt == null) return null;
+    return modelMapper.map(attempt, ResAttemptShortDTO.class);
   }
 }

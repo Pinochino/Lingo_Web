@@ -6,7 +6,9 @@ import ExamCate from "../../components/tests/ListPage/ExamCate";
 import TestItem from "../../components/tests/ListPage/TestItem";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setPage, setPageSize, setSearch, setSort } from "../../slice/testListSlice";
+import { retrieveTests, setPage, setPageSize, setSearch, setSort, setTests } from "../../slice/testListSlice";
+import { useEffect } from "react";
+import { retrieveAttempts } from "../../slice/attempts";
 
 
 const TestListPage = () => {
@@ -14,7 +16,20 @@ const TestListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { sort, search, page, pageSize } = useSelector(state => state.list);
+  const { sort, search, category, status, page, pageSize } = useSelector(state => state.tests);
+
+
+  const userId = 1; // integrate with authentication
+
+  // get all test with filter
+  useEffect(() => {
+    dispatch(retrieveTests({ sort, search, category, status }));
+  }, [sort, search, category, status]);
+
+  // get all attempt user did along with test 
+  useEffect(() => {
+    dispatch(retrieveAttempts(userId));
+  }, [userId]);
 
   const handleNavigate = (para, value) => {
     const currentParams = new URLSearchParams(location.search);
@@ -89,8 +104,8 @@ const TestListPage = () => {
               <Pagination align="center"
                 showSizeChanger
                 onShowSizeChange={onShowSizeChange}
-                defaultCurrent={1}
-                total={500}
+                defaultCurrent={page}
+                total={pageSize}
               />
             </div>
 

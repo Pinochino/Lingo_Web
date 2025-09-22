@@ -1,15 +1,38 @@
 import { Button, Card, Col, Row, Space, Typography } from "antd"
 import {
-  CaretRightOutlined, ClockCircleFilled,
+  CaretRightOutlined, CheckCircleFilled, CheckCircleOutlined, ClockCircleFilled,
   QuestionCircleFilled,
   StarFilled, UserOutlined
 } from '@ant-design/icons';
+import { useSelector } from "react-redux";
+import { selectMergedTests } from "../../../store/selectors";
+import { useNavigate } from "react-router-dom";
 
 const TestItem = () => {
   const { Text } = Typography;
+  const mergedTests = useSelector(selectMergedTests);
+
+  console.log(mergedTests);
+  const navigate = useNavigate();
 
 
-  const TestItem = () => {
+
+  const Item = ({ attempts, category, duration, finish = false, id, questions, title, type }) => {
+
+    const slugify = (str) => {
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+    };
+
+    const handleButton = () => {
+      const slug = slugify(title);
+      navigate(`/tests/${id}/${slug}`);
+    }
+
     return (
       <Col xs={{ span: 24 }}
         sm={{ span: 12 }}
@@ -17,40 +40,38 @@ const TestItem = () => {
       >
         <Card
           className="shadow-lg hover:shadow-xl transition-all duration-300"
-          style={{ padding: 18, display: "flex", flexDirection: "column", height: "100%" }}
+          style={{ padding: 8, display: "flex", flexDirection: "column", height: "100%" }}
         >
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">TOEIC</span>
-            <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Listening</span>
+          <div className="flex flex-wrap items-start justify-between">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{category}</span>
+              <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">{type}</span>
+            </div>
+
+            {finish && <CheckCircleFilled className=" !text-green-500 !text-xl mt-1" />}
           </div>
 
           <h3 className="text-lg font-bold text-gray-900 mb-4 hover:text-blue-600 ">
-            TOEIC Listening Comprehensive Test
+            {title}
           </h3>
 
           <Row gutter={[16, 16]} className="mb-6 text-gray-600" style={{ flex: "0 0 auto" }}>
             <Col span={12}>
               <Space>
                 <ClockCircleFilled className="!text-blue-500" />
-                <Text>45 phút</Text>
+                <Text>{duration} phút</Text>
               </Space>
             </Col>
             <Col span={12}>
               <Space>
                 <QuestionCircleFilled className="!text-green-500" />
-                <Text>100 câu</Text>
+                <Text>{questions} câu</Text>
               </Space>
             </Col>
             <Col span={12}>
               <Space>
                 <UserOutlined className="!text-orange-500" />
-                <Text>1,823 lượt</Text>
-              </Space>
-            </Col>
-            <Col span={12}>
-              <Space>
-                <StarFilled className="!text-yellow-500" />
-                <Text>4.6 (89)</Text>
+                <Text>{attempts} lượt</Text>
               </Space>
             </Col>
           </Row>
@@ -61,8 +82,9 @@ const TestItem = () => {
               block
               size="large"
               icon={<CaretRightOutlined />}
+              onClick={handleButton}
             >
-              Vào thi
+              {finish ? "Xem kết quả" : "Vào thi"}
             </Button>
           </div>
         </Card>
@@ -73,9 +95,9 @@ const TestItem = () => {
   return (
     <Row gutter={[16, 16]}>
       {
-        [...Array(10)].map((item, index) => {
+        mergedTests.map((item) => {
           return (
-            <TestItem key={index} />
+            <Item key={item.id} {...item} />
           )
         })
       }

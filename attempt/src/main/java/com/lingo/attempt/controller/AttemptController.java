@@ -2,6 +2,7 @@ package com.lingo.attempt.controller;
 
 import com.lingo.attempt.dto.ReqAttemptDTO;
 import com.lingo.attempt.dto.ResAttemptDTO;
+import com.lingo.attempt.dto.ResAttemptShortDTO;
 import com.lingo.attempt.service.AttemptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,16 @@ public class AttemptController {
     return this.attemptService.createAttempt(req);
   }
 
-  @GetMapping
+  @GetMapping("/full")
   public List<ResAttemptDTO> getUserAttempts(@RequestParam Long userId){
     return this.attemptService.getUserAttempts(userId);
   }
+
+  @GetMapping
+  public List<ResAttemptShortDTO> getUserAttemptsShort(@RequestParam Long userId){
+    return this.attemptService.getUserAttemptsShort(userId);
+  }
+
 
   @GetMapping("/{attemptId}")
   public ResAttemptDTO getSingleAttempt(@PathVariable Long attemptId){

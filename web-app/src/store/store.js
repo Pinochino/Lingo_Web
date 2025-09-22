@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import testListSlice from "../slice/testListSlice";
-
+import attemptSlice from "../slice/attempts"
 
 export const store = configureStore({
     reducer: {
-        list: testListSlice,
+        tests: testListSlice,
+        attempts: attemptSlice,
     },
 });

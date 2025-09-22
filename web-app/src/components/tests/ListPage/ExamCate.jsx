@@ -17,7 +17,7 @@ import { setCategory } from "../../../slice/testListSlice";
 
 export default function ExamCate({ handleNavigate }) {
   const dispatch = useDispatch();
-  const active = useSelector((state) => state.list.category);
+  const active = useSelector((state) => state.tests.category);
 
   const handleCateChange = (event) => {
     console.log("Button value:", event);

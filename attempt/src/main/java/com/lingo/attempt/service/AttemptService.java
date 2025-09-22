@@ -2,6 +2,7 @@ package com.lingo.attempt.service;
 
 import com.lingo.attempt.dto.ReqAttemptDTO;
 import com.lingo.attempt.dto.ResAttemptDTO;
+import com.lingo.attempt.dto.ResAttemptShortDTO;
 import com.lingo.attempt.dto.ResCorrectAns;
 import com.lingo.attempt.mapper.AttemptMapper;
 import com.lingo.attempt.model.Attempt;
@@ -133,6 +134,14 @@ public class AttemptService {
       }
       return list;
 
+    } catch (NotFoundException e) {
+      throw new NotFoundException(Constants.USER_NOT_FOUND);
+    }
+  }
+
+  public List<ResAttemptShortDTO> getUserAttemptsShort(Long userId){
+    try {
+      return this.attemptRepository.getUserAttemptsShort(userId);
     } catch (NotFoundException e) {
       throw new NotFoundException(Constants.USER_NOT_FOUND);
     }

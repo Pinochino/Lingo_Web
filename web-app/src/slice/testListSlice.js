@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getListTests } from "../config/testsApi";
+import { allTests } from "../data/MockData";
 
 
 const initialState = {
@@ -8,10 +10,19 @@ const initialState = {
   sort: "",
   page: 1,
   pageSize: 10,
+  tests: allTests.tests  // mock data
 };
 
+export const retrieveTests = createAsyncThunk(
+  "tests/retrieve",
+  async (filters) => {
+    const res = await getListTests(filters);
+    return res.data;
+  }
+);
+
 const testListSlice = createSlice({
-  name: "list",
+  name: "tests",
   initialState,
   reducers: {
     setSort: (state, action) => {
@@ -31,10 +42,22 @@ const testListSlice = createSlice({
     },
     setCategory: (state, action) => {
       state.category = action.payload
+    },
+    setTests: (state, action) => {
+      state.tests = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(retrieveTests.fulfilled, (state, action) => {
+        state.tests = action.payload.data;
+        state.page = action.payload.page;
+        state.pageSize = action.payload.pageSize;
+      })
   }
+
 });
 
-export const { setSort, setSearch, setPage, setPageSize, setStatus, setCategory } = testListSlice.actions;
+export const { setSort, setSearch, setPage, setPageSize, setStatus, setCategory, setTests } = testListSlice.actions;
 
 export default testListSlice.reducer;
