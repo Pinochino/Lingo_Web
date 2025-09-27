@@ -29,7 +29,7 @@ export const retrieveSingleQuestion = createAsyncThunk(
 
 export const modifyQuestion = createAsyncThunk(
     "questions/update",
-    async (id, question) => {
+    async ({ id, question }) => {
         return await updateQuestion(id, question);
     }
 )
@@ -73,15 +73,17 @@ const questionSlice = createSlice({
                 answerExisting.isCorrect = isCorrect
             } else {
                 state.userAnswers.push({
-                    question: {
-                        questionId: questionId,
-                        questionTitle: questionTitle,
-                        questionNumber: questionNumber
-                    },
-                    isCorrect: isCorrect,
-                    userAnswer: userAnswer,
-                    selectedAnswerId: userAnswerId,
+                    // question: {
+                    //     questionId: questionId,
+                    //     questionTitle: questionTitle,
+                    //     questionNumber: questionNumber
+                    // },
+                    // isCorrect: isCorrect,
+                    // userAnswer: userAnswer,
+                    // selectedAnswerId: userAnswerId,
 
+                    questionId: questionId,
+                    userAnswer: userAnswer.split(".")[0]
                 }
 
                 )
@@ -103,7 +105,7 @@ const questionSlice = createSlice({
                 return [...action.payload];
             })
             .addCase(modifyQuestion.fulfilled, (state, action) => {
-                const index = state.findIndex(q => q.id === action.payload.id);
+                const index = state.questions.findIndex(q => q.id === action.payload.id);
                 if (index !== -1) {
                     state.questions[index] = { ...state[index], ...action.payload };
                 }
@@ -116,7 +118,7 @@ const questionSlice = createSlice({
                 state.questions.push(action.payload);
             })
             .addCase(retrieveQuestionForTest.fulfilled, (state, action) => {
-                return [...action.payload];
+                state.questions = action.payload
             });
     }
 });

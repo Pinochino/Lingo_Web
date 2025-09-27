@@ -21,9 +21,11 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.Storage.BlobListOption;
-
+import com.lingo.fileservice.domain.FileDeleteDTO;
 import com.lingo.fileservice.domain.FileResponse;
+import com.lingo.fileservice.domain.ReqUpdateResourceDTO;
 import com.lingo.fileservice.enums.FileCategory;
+import com.lingo.fileservice.httpclient.MediaResourceClient;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,12 @@ public interface FileService {
 
         List<FileResponse> uploadMultipleFiles(MultipartFile[] files, String testTitle, FileCategory fileCategory)
                         throws IOException;
+
+        void deleteFile(FileDeleteDTO dto) throws IOException;
+
+        FileResponse updateMediaResource(ReqUpdateResourceDTO resourceDTO, String objectName, MultipartFile file,
+                        String testTitle, FileCategory fileCategory, long id)
+                        throws IOException, Exception;
 
 }
 
@@ -52,6 +60,8 @@ class FileServiceImpl implements FileService {
         // String objectName;
         @Value("${spring.cloud.gcp.credentials.location}")
         String credentialFilePath;
+
+        final MediaResourceClient mediaResourceClient;
 
         Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
@@ -165,6 +175,69 @@ class FileServiceImpl implements FileService {
                         }
                 }).collect(Collectors.toList());
                 return responses;
+        }
+
+        @Override
+        public void deleteFile(FileDeleteDTO dto) throws IOException {
+                Storage storage = StorageOptions
+                                .newBuilder().setProjectId(projectId).setCredentials(ServiceAccountCredentials
+                                                .fromStream(new FileInputStream(
+                                                                "C:/Project/Lingo/fileservice/src/main/resources/keys/lingo-472101-15e886f10d3f.json")))
+                                .build().getService();
+                Blob blob = storage.get(bucketName, dto.getUpdatedFileName());
+                if (blob == null) {
+                        System.out.println("The object " + dto.getUpdatedFileName() + " wasn't found in " + bucketName);
+                        return;
+                }
+                BlobId idWithGeneration = blob.getBlobId();
+                // Deletes the blob specified by its id. When the generation is present and
+                // non-null it will be
+                // specified in the request.
+                // If versioning is enabled on the bucket and the generation is present in the
+                // delete request,
+                // only the version of the object with the matching generation will be deleted.
+                // If instead you want to delete the current version, the generation should be
+                // dropped by
+                // performing the following.
+                // BlobId idWithoutGeneration =
+                // BlobId.of(idWithGeneration.getBucket(), idWithGeneration.getName());
+                // storage.delete(idWithoutGeneration);
+                storage.delete(idWithGeneration);
+
+                System.out.println(
+                                "Object " + dto.getUpdatedFileName() + " was permanently deleted from " + bucketName);
+        }
+
+        @Override
+        public FileResponse updateMediaResource(ReqUpdateResourceDTO resourceDTO, String objectName, MultipartFile file,
+                        String testTitle, FileCategory fileCategory, long resourceId)
+                        throws IOException, Exception {
+                if (objectName == null || objectName.isEmpty()) {
+                        throw new IllegalArgumentException("Object name cannot be null or empty");
+                }
+                if (file == null || file.isEmpty()) {
+                        throw new IllegalArgumentException("File cannot be null or empty");
+                }
+                if (resourceDTO == null) {
+                        throw new IllegalArgumentException("Resource DTO cannot be null");
+                }
+
+                try {
+                        // Upload new file first to ensure it succeeds before deleting the old one
+                        FileResponse response = uploadSingleFile(file, testTitle, fileCategory);
+                        resourceDTO.setResourceContent(response.getMediaUrl());
+
+                        // Call external service to update resource
+                        mediaResourceClient.updateMediaResource(resourceDTO, resourceId);
+
+                        // Delete old file after successful upload and external service call
+                        deleteFile(new FileDeleteDTO(objectName));
+
+                        return response;
+                } catch (Exception e) {
+                        log.error("Failed to update media resource: {}", e.getMessage());
+                        throw e;
+                }
         }
 
 }

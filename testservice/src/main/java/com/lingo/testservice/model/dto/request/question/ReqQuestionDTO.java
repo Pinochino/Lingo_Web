@@ -17,6 +17,7 @@ public class ReqQuestionDTO {
     String answerKey;
     String explanation;
     String part;
+    int questionNumber;
     MediaResourceCategory category;
 
     // @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

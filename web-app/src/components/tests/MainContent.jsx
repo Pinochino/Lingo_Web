@@ -1,19 +1,22 @@
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import React, { useRef, useState } from "react";
 import SideProgress from "./SideProgress";
 import QuestionCard from "./QuestionCard";
 import { questionOfTest } from "../../data/MockData";
 import _ from "lodash";
+import { useSelector } from "react-redux";
 
-const MainContent = ({ editMode }) => {
+const MainContent = ({ editMode, testTitle, testId }) => {
     const [activeQuestion, setActiveQuestion] = useState(null);
 
     const [listQuestionNumber, setListQuestionNumber] = useState(0);
     const questionRefs = useRef({});
-    const parts = _.uniq(questionOfTest.map((item) => item.part));
-    const questionsPerPart = _.countBy(questionOfTest, "part");
+    const { userAnswers, questions } = useSelector((state) => state.questions);
+    const numOfQues = 100;
+    const parts = _.uniq(questions.map((item) => item.part));
+    const questionsPerPart = _.countBy(questions, "part");
     const groupQuestion = _.groupBy(
-        questionOfTest.map((q, i) => ({
+        questions.map((q, i) => ({
             ...q,
             resourceContent: q.resourceContent ?? `null-${i}`
         })),
@@ -40,19 +43,40 @@ const MainContent = ({ editMode }) => {
 
     const movePage = (action) => {
         setListQuestionNumber((prev) => {
-            if (action === "next") return Math.min(prev + 1, questionCardComponents.length - 1);
-            if (action === "previous") return Math.max(prev - 1, 0);
-            return prev;
+            let newIndex = prev;
+            if (action === "next") {
+                newIndex = Math.min(prev + 1, questionCardComponents.length - 1);
+            }
+            if (action === "previous") {
+                newIndex = Math.max(prev - 1, 0);
+            }
+
+            const groupKey = Object.keys(groupQuestion)[newIndex];
+            const groupQuestions = groupQuestion[groupKey];
+            if (groupQuestions && groupQuestions.length > 0) {
+                setActiveQuestion(groupQuestions[0].questionNumber);
+                setTimeout(() => {
+                    questionRefs.current[groupQuestions[0].questionNumber]?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                }, 100);
+            }
+
+            return newIndex;
         });
     };
 
+
     const questionToGroupIndex = {};
     Object.entries(groupQuestion).forEach(([_, item], groupIdx) => {
+
         item.forEach((q) => {
             questionToGroupIndex[q.questionNumber] = groupIdx;
         });
     });
-
+    console.log("User answers:", userAnswers);
+    // console.log("Question Of test:", questions);
     return (
         <main className="flex min-h-screen">
             <div className="flex-1 p-6 overflow-y-auto">

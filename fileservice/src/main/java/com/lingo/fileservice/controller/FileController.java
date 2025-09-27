@@ -9,15 +9,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lingo.fileservice.domain.FileDeleteDTO;
 import com.lingo.fileservice.domain.FileResponse;
+import com.lingo.fileservice.domain.FileUpdateDTO;
+import com.lingo.fileservice.domain.ReqUpdateResourceDTO;
 import com.lingo.fileservice.enums.FileCategory;
 import com.lingo.fileservice.service.FileService;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/v1/file")
@@ -45,6 +54,30 @@ public class FileController {
         List<FileResponse> response = fileService.uploadMultipleFiles(files, testTitle, fileCategory);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteSingleFIle(@RequestBody FileDeleteDTO updatedFileName) throws IOException {
+        fileService.deleteFile(updatedFileName);
+        return ResponseEntity.ok().body(null);
+    }
+
+    @PutMapping("/update/{resourceId}")
+    public ResponseEntity<FileResponse> updateFileAndMediaResource(
+            @RequestParam("file") @NotNull MultipartFile file,
+            @RequestParam("testTitle") @NotBlank String testTitle,
+            @RequestParam("fileCategory") @NotNull FileCategory fileCategory,
+            @RequestParam("currentResourceContent") @NotBlank String currentResourceContent,
+            @RequestParam("updatedFileName") @NotBlank String updatedFileName,
+            @PathVariable("resourceId") long resourceId) throws IOException, Exception {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("File is required");
+        }
+        ReqUpdateResourceDTO resourceDTO = new ReqUpdateResourceDTO(); // Initialize with appropriate fields
+        // Populate resourceDTO fields if necessary (e.g., set ID or other properties)
+        FileResponse response = fileService.updateMediaResource(resourceDTO, updatedFileName, file, testTitle,
+                fileCategory, resourceId);
+        return ResponseEntity.ok(response);
     }
 
 }

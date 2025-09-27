@@ -58,7 +58,7 @@ const CreateTestPage = () => {
             });
 
     };
-    console.log(form.getFieldValue("mediaUrl"));
+    // console.log(form.getFieldValue("mediaUrl"));
     const newTest = () => {
         setTest(initialTestState);
         setSubmitted(false);
@@ -112,28 +112,43 @@ const CreateTestPage = () => {
                 prevQuestions.map(q => {
                     const matchedFile = grouped["QUESTION_IMAGE"].find(item => {
                         const questionNumber = item?.fileName?.split("/")[1].split("-")[3];
-                        // console.log("debug matched question number image", questionNumber);
-                        // console.log("debug matched question image", parseInt(questionNumber.split("_")[1]?.split(".")[0], 10));
-                        return (
-                            questionNumber &&
-                            parseInt(questionNumber?.split("_")[1]?.split(".")[0], 10) === q?.questionNumber
-                        );
+                        if (!questionNumber) return false;
+
+                        const parts = questionNumber.split(".")[0].split("_");
+                        const questionNumberStart = parts[1];
+                        const questionNumberEnd = parts[2];
+
+                        // Multiple question case
+                        if (questionNumberStart && questionNumberEnd) {
+                            return (
+                                q.questionNumber >= parseInt(questionNumberStart, 10) &&
+                                q.questionNumber <= parseInt(questionNumberEnd, 10)
+                            );
+                        }
+
+                        // Single question case
+                        const num = parseInt(parts[1], 10);
+                        return num === q?.questionNumber;
                     });
 
-                    // console.log("debug matched file image", matchedFile);
+                    // If no file matched
+                    if (!matchedFile) return q;
 
-                    return matchedFile
-                        ? { ...q, resourceContent: matchedFile.mediaUrl }
-                        : q;
+                    // Apply resourceContent update
+                    return {
+                        ...q,
+                        resourceContent: matchedFile.mediaUrl,
+                    };
                 })
             );
         }
+
     }, [uploadedFiles, form])
     // console.log("Grouped files:", groupedUploadedFiles)
     // console.log("Question by part:", questionGroupedByPart);
     // console.log("Audio file for test:", form.getFieldValue("mediaUrl"));
-    // console.log("Questions:", questionList);
-    // console.log("Questions test sample", questionSample)
+    console.log("Questions:", questionList);
+    console.log("Questions upload sample", questionSample)
     // console.log("Test title before upload:", form.getFieldValue("title"));
     return (
         <>

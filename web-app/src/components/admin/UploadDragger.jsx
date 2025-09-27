@@ -7,6 +7,7 @@ import { FaRegImage } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 import * as XLSX from "xlsx";
 import { extractData, readExcelFile, saveMultipleFiles } from '../../slice/files';
+import { checkType } from '../../utils/checkType';
 
 const UploadDragger = ({ type, testTitle, mediaUrl, form, typeUpload }) => {
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const UploadDragger = ({ type, testTitle, mediaUrl, form, typeUpload }) => {
     }
     const handleUploadResourceContent = (options) => {
         // console.log(options);
+
         const { file, onSuccess, onError } = options;
         const newFiles = [...fileList, file];
         setFileList(newFiles);

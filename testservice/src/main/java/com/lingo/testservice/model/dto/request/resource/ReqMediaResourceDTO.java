@@ -18,5 +18,5 @@ public class ReqMediaResourceDTO {
     String explanationResourceContent;
     @Nullable
     String description;
-    MediaResourceCategory category;
+
 }

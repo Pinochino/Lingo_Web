@@ -33,6 +33,7 @@ public class Question {
     Test test;
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     List<Answer> answers;
-    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "resource_id")
     MediaResource resource;
 }

@@ -51,6 +51,7 @@ class TestServiceImpl implements TestService {
         Optional<MediaResource> resourceOptional = resourceRepository.findByResourceContent(dto.getMediaUrl());
 
         Test test = mapper.toTest(dto);
+        test.setTitle(test.getTitle().replaceAll(" ", "_"));
         Test savedTest = testRepository.save(test);
 
         resourceOptional.ifPresent(resource -> {

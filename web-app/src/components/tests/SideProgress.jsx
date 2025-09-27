@@ -28,7 +28,7 @@ const SideProgress = ({ parts, questionsPerPart, currentIndex, setCurrentIndex, 
                     <div key={part} className="mb-6">
                         <div className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                             <span className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs mr-2">
-                                {part.split(" ")[1]}
+                                {part?.split(" ")[1]}
                             </span>
                             {part}
                         </div>
@@ -43,7 +43,7 @@ const SideProgress = ({ parts, questionsPerPart, currentIndex, setCurrentIndex, 
                                         onClick={() => handleClick(qNum + 1)}
 
                                         className={`question-indicator w-10 h-10 rounded border flex items-center justify-center text-sm font-medium cursor-pointer transition-colors
-                                            ${userAnswers.find((a) => a?.question?.questionNumber === qNum + 1)
+                                            ${userAnswers?.find((a) => a?.question?.questionNumber === qNum + 1)
                                                 ? "border-blue-500 bg-blue-50 text-blue-600"
                                                 : "border-gray-300 bg-white hover:bg-gray-50"}
                                            ${activeQuestion === qNum + 1 ? "!bg-blue-500 !text-white" : ""}

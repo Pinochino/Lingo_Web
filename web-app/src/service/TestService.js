@@ -91,8 +91,8 @@ export const addResource = async (resource) => {
     }
     return (await response).data;
 }
-export const updateResource = async (id, updateResource) => {
-    const URL = `/resource/update/${id}`;
+export const updateResource = async (resourceContent, updateResource) => {
+    const URL = `/resource/update/${resourceContent}`;
     const response = await instance.put(URL, updateResource);
     return (await response).data;
 }

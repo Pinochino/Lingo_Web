@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as XLSX from "xlsx";
-import { uploadMultipleFiles } from "../service/FileService";
+import { modifyQuestionResourceMedia, uploadMultipleFiles, uploadOneFile } from "../service/FileService";
 import { FaFileUpload } from "react-icons/fa";
 
 export const readExcelFile = createAsyncThunk(
@@ -30,6 +30,19 @@ export const saveMultipleFiles = createAsyncThunk(
     }
 );
 
+export const saveSingleFile = createAsyncThunk(
+    "files/uploadSingleFiles",
+    async ({ file, testTitle, fileCategory }) => {
+        return await uploadOneFile(file, testTitle, fileCategory);
+    }
+)
+
+export const saveUpdatingResourceMedia = createAsyncThunk(
+    "files/updateMediaResource",
+    async ({ resourceId, file, testTitle, fileCategory, currentResourceContent, updatedFileName, }) => {
+        return await modifyQuestionResourceMedia(resourceId, file, testTitle, fileCategory, currentResourceContent, updatedFileName);
+    }
+)
 
 const fileSlice = createSlice({
     name: "file",
@@ -40,6 +53,7 @@ const fileSlice = createSlice({
         loading: false,
         error: null,
         uploadedFiles: [],
+        fileUpdating: null,
         uploadPercent: 0
     },
     reducers: {
@@ -66,7 +80,7 @@ const fileSlice = createSlice({
                     explanation: item.explanation,
                     part: item.part,
                     category: item.category,
-                    resourceContent: mediaUrl,
+                    resourceContent: item.resourceContent || mediaUrl,
                     testTitle: testTitle,
                     answers: reqAnswer,
                     explanationResourceContent: item.explanationResourceContent,
@@ -90,30 +104,40 @@ const fileSlice = createSlice({
 
     extraReducers: (builder) => {
         builder
-            .addCase(readExcelFile.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
             .addCase(readExcelFile.fulfilled, (state, action) => {
                 state.loading = false;
                 state.excelData = action.payload;
-            })
-            .addCase(readExcelFile.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
             })
             .addCase(saveMultipleFiles.fulfilled, (state, action) => {
                 state.loading = false;
                 state.uploadedFiles.push(action.payload);
             })
-            .addCase(saveMultipleFiles.pending, (state, action) => {
-                state.loading = true;
-                state.error = null
-            }).addCase(saveMultipleFiles.rejected, (state, action) => {
+            .addCase(saveSingleFile.fulfilled, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.fileUpdating = action.payload;
             })
-    },
+            .addCase(saveUpdatingResourceMedia.fulfilled, (state, action) => {
+                state.loading = false;
+                state.fileUpdating = action.payload;
+            })
+            .addMatcher(
+                (action) =>
+                    [readExcelFile.pending, saveMultipleFiles.pending, saveSingleFile.pending, saveUpdatingResourceMedia.pending].includes(action.type),
+                (state) => {
+                    state.loading = true;
+                    state.error = null;
+                }
+            )
+            .addMatcher(
+                (action) =>
+                    [readExcelFile.rejected, saveMultipleFiles.rejected, saveSingleFile.rejected, saveUpdatingResourceMedia.rejected].includes(action.type),
+                (state, action) => {
+                    state.loading = false;
+                    state.error = action.payload;
+                }
+            )
+    }
+
 });
 
 const { reducer } = fileSlice;

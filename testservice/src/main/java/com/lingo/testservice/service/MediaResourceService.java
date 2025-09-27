@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface MediaResourceService {
     ResMediaResourceDTO add(ReqMediaResourceDTO dto);
 
-    ResMediaResourceDTO update(ReqMediaResourceDTO dto, long id);
+    ResMediaResourceDTO update(ReqMediaResourceDTO dto, long resourceId);
 
     void delete(long id);
 
@@ -52,11 +52,13 @@ class MediaResourceServiceImpl implements MediaResourceService {
     }
 
     @Override
-    public ResMediaResourceDTO update(ReqMediaResourceDTO dto, long id) {
-        Optional<MediaResource> resourceOptional = repository.findById(id);
+    public ResMediaResourceDTO update(ReqMediaResourceDTO dto, long resourceId) {
+        Optional<MediaResource> resourceOptional = repository.findById(resourceId);
         resourceOptional.ifPresent(resource -> {
             resource.setResourceContent(dto.getResourceContent());
-            resource.setExplanationResourceContent(dto.getExplanationResourceContent());
+            if (dto.getExplanationResourceContent() != null) {
+                resource.setExplanationResourceContent(dto.getExplanationResourceContent());
+            }
             if (dto.getDescription() != null) {
                 resource.setDescription(dto.getDescription());
             }
