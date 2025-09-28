@@ -9,7 +9,7 @@ const HistoryAttempts = () => {
   const dispatch = useDispatch();
   const { attempts } = useSelector((state) => state.attempts);
   const histories = attempts.filter(a => String(a.quizId) === id);
-  console.log(histories);
+  // console.log(histories);
 
   const userId = 1;
   useEffect(() => {
@@ -21,7 +21,7 @@ const HistoryAttempts = () => {
       title: 'Ngày làm',
       dataIndex: 'submittedAt',
       key: 'submittedAt',
-      render: text => <text>{text.split("T")[0].split("-").join("/")}</text>,
+      render: text => <div>{text.split("T")[0].split("-").join("/")}</div>,
     },
     {
       title: 'Kết quả',
@@ -45,7 +45,7 @@ const HistoryAttempts = () => {
   return (
     histories.length !== 0 && <div className='space-y-4 mb-7'>
       <h1 className='font-semibold text-lg'>Kết quả làm bài của bạn:</h1>
-      <Table columns={columns} dataSource={histories} pagination={false} />
+      <Table columns={columns} dataSource={histories} pagination={false} scroll={{ x: 'max-content' }} />
     </div>
 
   )

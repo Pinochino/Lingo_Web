@@ -11,14 +11,14 @@ const initialState = {
 };
 
 export const initializeAuth = createAsyncThunk(
-  'auth/init',
+  'authentication/init',
   async (_, thunkAPI) => {
     try {
       const token = localStorage.getItem('access_token');
       if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         const userInfo = await getUserInfoApi(token);
-        return { user: userInfo, token };
+        return { user: userInfo.data, token };
       }
       return null;
     } catch (error) {
@@ -38,8 +38,8 @@ export const login = createAsyncThunk(
       localStorage.setItem("access_token", access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
       const userInfo = await getUserInfoApi(access_token);
-      localStorage.setItem('user_profile', JSON.stringify(userInfo));
-      return { user: userInfo, token: access_token }
+      localStorage.setItem('user_profile', JSON.stringify(userInfo.data));
+      return { user: userInfo.data, token: access_token }
     } catch (error) {
       handleApiError(error, "Đăng nhập thất bại")
       return thunkAPI.rejectWithValue(error?.response?.data?.detail || "Đăng nhập thất bại");
@@ -65,13 +65,16 @@ export const loginGoogle = createAsyncThunk(
   async (code, thunkAPI) => {
     try {
       const response = await loginGoogleApi(code);
-      const { access_token } = response.data;
-      const userInfo = await getUserInfoApi(access_token);
-      await registerGG(userInfo, access_token);
-
+      const { access_token } = response.data;   // public axios so need .data
+      console.log("google: ", access_token);
       localStorage.setItem("access_token", access_token);
-      localStorage.setItem('user_profile', JSON.stringify(userInfo));
-      return { user: userInfo, token: access_token }
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
+      const userInfo = await getUserInfoApi(access_token);  // need to run after get new access token from register GG
+      localStorage.setItem('user_profile', JSON.stringify(userInfo.data));
+      await registerGG(userInfo.data, access_token);
+      console.log(userInfo.data);
+
+      return { user: userInfo.data, token: access_token }
     } catch (error) {
       handleApiError(error, "Đăng nhập google thất bại");
       return thunkAPI.rejectWithValue(error?.response?.data?.detail || "Đăng ký thất bại");

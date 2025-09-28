@@ -69,7 +69,8 @@ public class AuthController {
             .maxAge(Long.parseLong(res.getRefreshExpiresIn()))
             .build();
 
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(res);
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(res);
   }
 
 

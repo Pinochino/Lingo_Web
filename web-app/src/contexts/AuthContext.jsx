@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      console.log(userData);
+      // console.log(userData);
       const response = await registerApi(userData);
       toast.info("Đăng ký tài khoản thành công")
       return true;
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
   const loginGoogle = async (code) => {
     try {
       setLoading(true);
-      console.log("From auth : ", code);
+      // console.log("From auth : ", code);
 
       const response = await axios.post(
         `http://localhost:8080/api/v1/auth/google/${code}`,

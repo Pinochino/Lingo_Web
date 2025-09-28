@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getListTests } from "../config/testsApi";
 import { allTests } from "../data/MockData";
+import { getListTests } from "../config/api";
 
 
 const initialState = {

@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, Pagination, Row, Select, Space, Tabs, Tag, Typography } from "antd"
+import { Button, Card, Col, Input, Pagination, Row, Select, Space, Spin, Tabs, Tag, Typography } from "antd"
 import RightSider from "../../components/tests/RightSider"
 import { CaretRightOutlined, ClockCircleFilled, ClockCircleOutlined, DownOutlined, PlayCircleOutlined, QuestionCircleFilled, QuestionCircleOutlined, SearchOutlined, StarFilled, StarOutlined, UserOutlined } from '@ant-design/icons';
 import FilterTab from "../../components/tests/ListPage/FilterTab";
@@ -17,7 +17,7 @@ const TestListPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { sort, search, category, status, page, pageSize } = useSelector(state => state.tests);
-
+  const { loading } = useSelector(state => state.attempts)
 
   const userId = 1; // integrate with authentication
 
@@ -55,6 +55,8 @@ const TestListPage = () => {
     dispatch(setPage(current));
     dispatch(setPageSize(pageSize));
   };
+
+  if (loading) return <Spin fullscreen={true} />
 
   return (
     <div className="bg-gray-50 pt-10 ">

@@ -65,7 +65,7 @@ const BeforeTestPage = () => {
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Sẵn sàng làm bài?</h3>
                     <p className="text-gray-600 text-sm mb-4">Đề thi mô phỏng chính thức TOEIC Reading với 100 câu hỏi trong 75 phút</p>
-                    <div className="flex items-start space-x-4 flex-col md:flex-row md:items-center gap-3 md:gap-0">
+                    <div className="flex items-start !space-x-4 flex-col md:flex-row md:items-center gap-3 md:gap-0">
                       <Button color="primary" variant="solid" size="large">
                         <CaretRightFilled className="text-xl text-shadow-gray-200" /> Bắt đầu làm bài
                       </Button>

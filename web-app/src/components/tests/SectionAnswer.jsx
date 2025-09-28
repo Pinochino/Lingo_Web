@@ -18,7 +18,7 @@ const SectionAnswer = () => {
   const { attempt } = useSelector(state => state.attempts);
 
 
-  console.log("print", attempt);
+  // console.log("print", attempt);
 
 
   const showModal = () => {

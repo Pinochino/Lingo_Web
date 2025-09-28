@@ -11,7 +11,7 @@ export const registerApi = (userData) =>
 
 
 export const getUserInfoApi = (access_token) =>
-  instance.get("/realms/Lingo/protocol/openid-connect/userinfo", {
+  publicInstance.get("/realms/Lingo/protocol/openid-connect/userinfo", {
     baseURL: "http://localhost:8180",
     headers: { Authorization: `Bearer ${access_token}` }
   });
@@ -30,6 +30,18 @@ export const registerGG = (userData, access_token) => {
     }
   )
 }
+
+export const getListTests = (params) => {
+  return instance.get("/api/v1/tests", { params });
+}
+
+export const getAttemptUserShort = (userId) => {
+  return instance.get("api/v1/attempt", { params: { userId } })
+};
+
+export const getAttempt = (attemptId) => {
+  return instance.get(`api/v1/attempt/${attemptId}`)
+};
 
 export function handleApiError(err, defaultMsg = "Có lỗi xảy ra") {
   const msg = err?.response?.data?.detail || defaultMsg;

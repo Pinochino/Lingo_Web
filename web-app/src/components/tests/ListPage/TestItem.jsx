@@ -12,7 +12,7 @@ const TestItem = () => {
   const { Text } = Typography;
   const mergedTests = useSelector(selectMergedTests);
 
-  console.log(mergedTests);
+  // console.log(mergedTests);
   const navigate = useNavigate();
 
 

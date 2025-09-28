@@ -37,7 +37,7 @@ const AfterTestPage = () => {
     dispatch(retrieveAttempt(attemptId));
   }, [attemptId]);
 
-  console.log(attempt);
+  // console.log(attempt);
 
 
   const cols = [

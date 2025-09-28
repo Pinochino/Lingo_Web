@@ -58,7 +58,7 @@ public class AuthService {
       TokenExchangeResponse res = this.authenClient.exchangeGoogleToken(
               new GoogleTokenRequest("authorization_code",
                       clientId, clientSecret, code, "http://localhost:5173/"));
-
+//      log.info("Response: {}", res);
       return res;
     } catch (RuntimeException e) {
       log.error("loginAccount error: {}", e.getMessage());

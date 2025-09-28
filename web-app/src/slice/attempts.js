@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAttempt, getAttemptUserShort } from "../config/testsApi";
+import { getAttempt, getAttemptUserShort } from "../config/api";
 
 const initialState = {
   attempts: [
@@ -18,7 +18,7 @@ export const retrieveAttempts = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const res = await getAttemptUserShort(userId);
-      return res.data;
+      return res;
     } catch (err) {
       if (err.response && err.response.data) {
         return rejectWithValue(err.response.data); // custom error từ backend
@@ -33,7 +33,7 @@ export const retrieveAttempt = createAsyncThunk(
   async (attemptId, { rejectWithValue }) => {
     try {
       const res = await getAttempt(attemptId);
-      return res.data;
+      return res;
     } catch (err) {
       if (err.response && err.response.data) {
         return rejectWithValue(err.response.data); // custom error từ backend

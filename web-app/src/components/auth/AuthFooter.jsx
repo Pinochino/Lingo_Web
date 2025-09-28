@@ -6,9 +6,6 @@ const AuthFooter = () => {
 
   const location = useLocation();
   const googleAuthUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
-  console.log();
-
-
   return (
     <div>
       <div class="relative my-8">
