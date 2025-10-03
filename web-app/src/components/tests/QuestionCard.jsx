@@ -19,6 +19,7 @@ const QuestionCard = ({ groupKey, questionRefs, resourceContent, editMode, quest
     const [explanation, setExplanation] = useState();
     const dispatch = useDispatch();
     const { fileUpdating } = useSelector(state => state.file)
+    const { userAnswers } = useSelector((state) => state.questions);
 
     // Quill toolbar config
     const quillModules = {
@@ -262,7 +263,7 @@ const QuestionCard = ({ groupKey, questionRefs, resourceContent, editMode, quest
                                                             q.questionNumber
                                                         )
                                                     }
-                                                    value={answers[q.id]?.userAnswerChoice}
+                                                    value={userAnswers.find(a => a.questionId === q.id)?.userAnswer || ""}
                                                     className="!space-y-3 !flex !flex-col"
                                                 >
                                                     {q.answers?.map(

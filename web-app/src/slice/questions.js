@@ -58,7 +58,9 @@ export const retrieveQuestionForTest = createAsyncThunk(
 
 const questionSlice = createSlice({
     name: "question",
-    initialState,
+    initialState: {
+
+    },
     reducers: {
         getUserAnswers: (state, action) => {
             const { questionId, userAnswerChoice, userAnswer } = action.payload;
@@ -89,7 +91,8 @@ const questionSlice = createSlice({
                 state.questions.push(action.payload);
             })
             .addCase(retrieveAllQuestions.fulfilled, (state, action) => {
-                return [...action.payload];
+                return [...action.payload]
+
             })
             .addCase(retrieveSingleQuestion.fulfilled, (state, action) => {
                 return action.payload;
@@ -108,7 +111,14 @@ const questionSlice = createSlice({
                 state.questions.push(action.payload);
             })
             .addCase(retrieveQuestionForTest.fulfilled, (state, action) => {
-                state.questions = action.payload
+                state.questions = action.payload;
+                // console.log("debug redux:", action.payload);
+                state.userAnswers = action.payload.map(question => ({
+                    questionId: question.id,
+                    userAnswer: "",
+                    questionNumber: question.questionNumber
+                }))
+
             });
     }
 });

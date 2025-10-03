@@ -13,7 +13,7 @@ const MainContent = React.memo(({ editMode, testTitle, testId }) => {
     const { questions } = useSelector((state) => state.questions);
 
     const groupQuestion = React.useMemo(() => _.groupBy(
-        questions.map((q, i) => ({
+        questions?.map((q, i) => ({
             ...q,
             resourceContent: q.resourceContent ?? `null-${i}`,
         })),
@@ -106,7 +106,7 @@ const MainContent = React.memo(({ editMode, testTitle, testId }) => {
             </div>
             <div className={`lg:block ${isSideProgressOpen ? 'block' : 'hidden'} w-full lg:w-80 bg-[#ffffff] border-l border-gray-200 p-4 sm:p-6 mt-4 lg:mt-6 rounded-xl lg:mr-7`}>
                 <SideProgress
-                    parts={_.uniq(questions.map((item) => item.part))}
+                    parts={_.uniq(questions?.map((item) => item.part))}
                     questionsPerPart={_.countBy(questions, 'part')}
                     currentIndex={listQuestionNumber}
                     setCurrentIndex={setListQuestionNumber}

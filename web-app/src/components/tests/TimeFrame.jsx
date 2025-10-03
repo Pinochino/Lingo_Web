@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoIosExit } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import { submitUserAnswer } from "../../slice/tests";
+import _ from "lodash";
 
 const TimeFrame = ({ editMode, setEditMode }) => {
     const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             timeTaken,
             type: test?.type || null,
             fieldId: ["Listening", "Reading"],
-            answers: userAnswers
+            answers: _.map(userAnswers, (a) => _.omit(a, "questionNumber"))
         }));
     };
 
