@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const TimeFrame = ({ editMode, setEditMode }) => {
     const dispatch = useDispatch();
     const { userAnswers, questions } = useSelector((state) => state.questions);
+    const { user } = useSelector((state) => state.authentication);
     const { loading } = useSelector((state) => state.attempts);
     const { test } = useSelector(state => state.test);
     const [timeRemaining, setTimeRemaining] = useState(0);
@@ -18,6 +19,9 @@ const TimeFrame = ({ editMode, setEditMode }) => {
     const [modalSubmit, setModalSubmit] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const userInfo = JSON.parse(localStorage.getItem("user_info") || "{}");
+    const roles = userInfo.roles || [];
+
     useEffect(() => {
         if (test?.timeLimit) {
             setTimeRemaining(test.timeLimit * 60);
@@ -52,6 +56,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             const attemptId = await dispatch(
                 createAttempts({
                     quizId: test?.id || null,
+                    userId: user?.sub || null,
                     timeTaken,
                     type: test?.type || null,
                     field: ["Listening", "Reading"],
@@ -90,21 +95,23 @@ const TimeFrame = ({ editMode, setEditMode }) => {
                     <p className="text-[#ffffff] font-semibold text-lg">English Proficiency Test</p>
                 </div>
 
-                <Button
-                    className={`!text-xl !border-0 !text-[#ffffff] !p-5 flex justify-center items-center
-    ${editMode ? "!bg-red-500 hover:!bg-red-600" : "!bg-amber-500 hover:!bg-amber-600"}`}
-                    onClick={() => setEditMode(!editMode)}
-                >
-                    {editMode ? (
-                        <span className="flex items-center gap-2">
-                            <IoIosExit className="text-2xl" /> Exit Edit
-                        </span>
-                    ) : (
-                        <span className="flex items-center gap-2">
-                            <FaEdit /> Edit Mode
-                        </span>
-                    )}
-                </Button>
+                {roles.includes("manage-users") && (
+                    <Button
+                        className={`!text-xl !border-0 !text-[#ffffff] !p-5 flex justify-center items-center
+      ${editMode ? "!bg-red-500 hover:!bg-red-600" : "!bg-amber-500 hover:!bg-amber-600"}`}
+                        onClick={() => setEditMode(!editMode)}
+                    >
+                        {editMode ? (
+                            <span className="flex items-center gap-2">
+                                <IoIosExit className="text-2xl" /> Exit Edit
+                            </span>
+                        ) : (
+                            <span className="flex items-center gap-2">
+                                <FaEdit /> Edit Mode
+                            </span>
+                        )}
+                    </Button>
+                )}
 
 
                 <div className="flex gap-4 items-center">
@@ -117,14 +124,16 @@ const TimeFrame = ({ editMode, setEditMode }) => {
                     </Button>
                 </div>
             </div>
-            {test?.mediaUrl && (
-                <div className="mt-4">
-                    <audio controls className="w-full">
-                        <source src={test.mediaUrl} type="audio/mpeg" />
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
-            )}
+            {
+                test?.mediaUrl && (
+                    <div className="mt-4">
+                        <audio controls className="w-full">
+                            <source src={test.mediaUrl} type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                )
+            }
             {/* Progress bar */}
             <div className="mt-3">
                 <div className="flex justify-between items-center">
@@ -150,7 +159,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             >
                 <p>Sau khi nộp, bạn sẽ không thể thay đổi câu trả lời.</p>
             </Modal>
-        </div>
+        </div >
     );
 };
 

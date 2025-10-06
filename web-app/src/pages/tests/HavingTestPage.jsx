@@ -10,7 +10,7 @@ const HavingTestPage = () => {
     const [editMode, setEditMode] = useState(false);
     const { id, name } = useParams();
     const dispatch = useDispatch();
-    const { questions, userAnswers } = useSelector((state) => state.questions)
+    const { questions, userAnswers } = useSelector((state) => state.questions);
     const { test } = useSelector((state) => state.tests);
     useEffect(() => {
         const getQuestionsOfTest = async (id) => {

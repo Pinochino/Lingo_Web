@@ -114,7 +114,7 @@ public Long createAttempt(ReqAttemptDTO req) {
     return att;
   }
 
-  public List<ResAttemptDTO> getUserAttempts(Long userId){
+  public List<ResAttemptDTO> getUserAttempts(String userId){
 
     List<ResAttemptDTO> list = new ArrayList<>();
     List<Attempt> attempts = null;
@@ -136,7 +136,7 @@ public Long createAttempt(ReqAttemptDTO req) {
     }
   }
 
-  public List<ResAttemptShortDTO> getUserAttemptsShort(Long userId){
+  public List<ResAttemptShortDTO> getUserAttemptsShort(String userId){
     try {
       return this.attemptRepository.getUserAttemptsShort(userId);
     } catch (NotFoundException e) {
@@ -185,7 +185,7 @@ public Long createAttempt(ReqAttemptDTO req) {
     attempt.setTimeTaken(req.getTimeTaken());
     attempt.setType(req.getType());
     // user id get with JWT
-    attempt.setUserId((long) 1);
+    attempt.setUserId(req.getUserId());
     return attempt;
   }
 

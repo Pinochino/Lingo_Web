@@ -8,13 +8,16 @@ const HistoryAttempts = () => {
   const { id, name } = useParams();
   const dispatch = useDispatch();
   const { attempts } = useSelector((state) => state.attempts);
+  const { user } = useSelector((state) => state.authentication);
   const histories = attempts.filter(a => String(a.quizId) === id);
-  // console.log(histories);
+  console.log(user);
 
-  const userId = 1;
+
   useEffect(() => {
-    dispatch(retrieveAttempts(userId));
-  }, [userId]);
+    if (user) {
+      dispatch(retrieveAttempts(user?.sub));
+    }
+  }, [user, dispatch]);
 
   const columns = [
     {

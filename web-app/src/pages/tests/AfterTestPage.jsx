@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import BoxComment from "../../components/tests/BoxComment";
 import RightSider from "../../components/tests/RightSider"
-import SectionAnswer from "../../components/tests/SectionAnswer";
+import SectionAnswer from "../../components/tests/AfterPage/SectionAnswer";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -117,9 +117,9 @@ const AfterTestPage = () => {
             {/* Conclude */}
 
             <Card className="!shadow-lg !pb-3">
-              <div className="flex justify-between items-center mb-4 flex-col md:flex-row md:gap-0 gap-3">
+              <div className="flex justify-between items-center mb-4 flex-col md:flex-row md:gap-0 !gap-3">
                 <h1 className="text-2xl font-bold text-gray-800">Kết Quả Bài Làm - New Economy TOEIC Test 10</h1>
-                <div className="flex space-x-3">
+                <div className="flex !space-x-2">
                   <Button icon={<ArrowLeftOutlined />} size="middle">
                     <span className="text-gray-700">Quay lại danh sách</span>
                   </Button>

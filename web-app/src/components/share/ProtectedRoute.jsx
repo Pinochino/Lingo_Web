@@ -1,0 +1,40 @@
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Spin } from "antd";
+import NotPermitted from "./NotPermitted";
+
+const RoleBaseRoute = ({ children }) => {
+  const userInfo = localStorage.getItem('user_profile');
+  const userRole = JSON.parse(userInfo).roles;
+  if (!userRole.includes['NORMAL_USER']) {
+    return (<>{children}</>)
+  } else {
+    return (<NotPermitted />)
+  }
+}
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, isLoading } = useSelector(state => state.authentication);
+
+  return (
+    <>
+      {isLoading === true ?
+        <Spin spinning={true} />
+        :
+        <>
+          {isAuthenticated === true ?
+            <>
+              <RoleBaseRoute>
+                {children}
+              </RoleBaseRoute>
+            </>
+            :
+            <Navigate to='/login' replace />
+          }
+        </>
+      }
+    </>
+  )
+}
+
+export default ProtectedRoute;

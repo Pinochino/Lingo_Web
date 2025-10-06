@@ -6,8 +6,8 @@ import {
   UnorderedListOutlined,
 } from '@ant-design/icons';
 import { useState } from "react";
-import DetailAnswer from "./DetailAnswer";
-import { PartLengthToeic, TestType } from "../../data/FixedData";
+import DetailAnswer from "../DetailAnswer";
+import { PartLengthToeic, TestType } from "../../../data/FixedData";
 import { useSelector } from "react-redux";
 
 const SectionAnswer = () => {

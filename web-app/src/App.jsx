@@ -15,7 +15,6 @@ import TestPage from './pages/admin/TestPage';
 import DashboardPage from './pages/admin/DashboardPage';
 
 
-import ListTestsPage from './pages/tests/ListTestsPage';
 import BeforeTestPage from './pages/tests/BeforeTestPage';
 import AfterTestPage from './pages/tests/AfterTestPage';
 import HavingTestPage from './pages/tests/HavingTestPage';
@@ -24,15 +23,13 @@ import RegisterPage from './pages/auth/RegisterPage';
 import ForgetPage from './pages/auth/ForgetPage';
 import ResetPage from './pages/auth/ResetPage';
 import { ToastContainer } from 'react-toastify';
-import TestListPage from './pages/tests/TestListPage';
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { initializeAuth } from "./slice/authentication";
-
-
-
-
-
+import TestListPage from './pages/tests/TestListPage';
+import ProtectedRoute from './components/share/ProtectedRoute';
+import NotFound from './components/share/NotFound';
+import { Spin } from 'antd';
 function App() {
 
   const dispatch = useDispatch();
@@ -46,13 +43,19 @@ function App() {
     {
       path: "/admin",
       element: (
-        <AdminLayout />
+        <ProtectedRoute>
+          <AdminLayout />
+        </ProtectedRoute>
       ),
+      errorElement: <NotFound />,
       children: [
         {
           index: true,
-          element: <DashboardPage />
-
+          element: (
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: "user",
@@ -70,6 +73,7 @@ function App() {
     {
       path: "/auth",
       element: <AuthLayout />,
+      errorElement: <NotFound />,
       children: [
         {
           path: "login",
@@ -92,6 +96,7 @@ function App() {
     {
       path: "/",
       element: <ClientLayout />,
+      errorElement: <NotFound />,
       children: [
         {
           index: true,

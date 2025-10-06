@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getUserInfoApi, handleApiError, loginApi, loginGoogleApi, logoutApi, registerApi, registerGG } from "../config/api";
+import { decodeToken } from "../utils/DecodeToken";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('user_profile')) || null,
@@ -16,14 +17,13 @@ export const initializeAuth = createAsyncThunk(
     try {
       const token = localStorage.getItem('access_token');
       if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        const userInfo = await getUserInfoApi(token);
-        return { user: userInfo.data, token };
+        const userInfo = decodeToken(token);
+        return { user: userInfo, token };
       }
       return null;
     } catch (error) {
       localStorage.clear();
-      delete axios.defaults.headers.common['Authorization'];
+      // delete axios.defaults.headers.common['Authorization'];
       return thunkAPI.rejectWithValue("Phiên đăng nhập hết hạn ");
     }
   });
@@ -36,10 +36,9 @@ export const login = createAsyncThunk(
       const response = await loginApi(username, password);
       const { access_token } = response.data;
       localStorage.setItem("access_token", access_token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
-      const userInfo = await getUserInfoApi(access_token);
-      localStorage.setItem('user_profile', JSON.stringify(userInfo.data));
-      return { user: userInfo.data, token: access_token }
+      const userInfo = decodeToken(access_token);
+      localStorage.setItem('user_profile', JSON.stringify(userInfo));
+      return { user: userInfo, token: access_token }
     } catch (error) {
       handleApiError(error, "Đăng nhập thất bại")
       return thunkAPI.rejectWithValue(error?.response?.data?.detail || "Đăng nhập thất bại");
@@ -83,13 +82,14 @@ export const loginGoogle = createAsyncThunk(
       const { access_token } = response.data;   // public axios so need .data
       console.log("google: ", access_token);
       localStorage.setItem("access_token", access_token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
-      const userInfo = await getUserInfoApi(access_token);  // need to run after get new access token from register GG
-      localStorage.setItem('user_profile', JSON.stringify(userInfo.data));
-      await registerGG(userInfo.data, access_token);
-      console.log(userInfo.data);
+      const userInfo = decodeToken(access_token);
 
-      return { user: userInfo.data, token: access_token }
+
+      localStorage.setItem('user_profile', JSON.stringify(userInfo));
+      await registerGG(userInfo, access_token);
+      // console.log(userInfo);
+
+      return { user: userInfo, token: access_token }
     } catch (error) {
       handleApiError(error, "Đăng nhập google thất bại");
       return thunkAPI.rejectWithValue(error?.response?.data?.detail || "Đăng ký thất bại");

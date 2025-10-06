@@ -27,12 +27,12 @@ public class AttemptController {
   }
 
   @GetMapping("/full")
-  public List<ResAttemptDTO> getUserAttempts(@RequestParam Long userId){
+  public List<ResAttemptDTO> getUserAttempts(@RequestParam String userId){
     return this.attemptService.getUserAttempts(userId);
   }
 
   @GetMapping
-  public List<ResAttemptShortDTO> getUserAttemptsShort(@RequestParam Long userId){
+  public List<ResAttemptShortDTO> getUserAttemptsShort(@RequestParam String userId){
     return this.attemptService.getUserAttemptsShort(userId);
   }
 
