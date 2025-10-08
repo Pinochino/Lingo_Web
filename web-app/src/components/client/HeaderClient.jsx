@@ -127,7 +127,7 @@ const HeaderClient = () => {
             <div style={{ borderTop: "1px solid #f3f4f6", padding: "8px 16px" }}>
                 <Button type="link" block>
                     Xem tất cả thông báo
-                </Button>cation
+                </Button>
             </div>
         </Card>
     );
@@ -199,7 +199,7 @@ const HeaderClient = () => {
 
                     <div className="flex items-center space-x-3">
                         {!userName ? <Link to={"/auth/login"} variant="text" color="primary" size="large" type="text">Đăng nhập</Link> : <>
-                            <Dropdown menu={{ menu }} trigger={['click']} open={openAnnounce}
+                            <Dropdown overlay={menu} trigger={['click']} open={openAnnounce}
                                 onOpenChange={(nextOpen) => setOpenAnnouce(nextOpen)} placement={`${window.innerWidth < 485 ? 'bottomCenter' : 'bottomRight'}`}
                             >
                                 <Button

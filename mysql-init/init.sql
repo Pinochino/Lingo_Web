@@ -1,0 +1,21 @@
+-- KEYCLOAK
+CREATE DATABASE IF NOT EXISTS `keycloak` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'keycloak'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON `keycloak`.* TO 'keycloak'@'%';
+
+-- ACCOUNT_SERVICE
+CREATE DATABASE IF NOT EXISTS `accountservice` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'account_admin'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON `accountservice`.* TO 'account_admin'@'%';
+
+-- ATTEMPT_SERVICE
+CREATE DATABASE IF NOT EXISTS `attemptservice` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'attempt_admin'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON `attemptservice`.* TO 'attempt_admin'@'%';
+
+-- TEST_SERVICE
+CREATE DATABASE IF NOT EXISTS `testservice` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'test_admin'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON `testservice`.* TO 'test_admin'@'%';
+
+FLUSH PRIVILEGES;

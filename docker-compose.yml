@@ -6,13 +6,19 @@ services:
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_USER: keycloak
-      MYSQL_PASSWORD: 123456
-      MYSQL_DATABASE: keycloak
+      # MYSQL_USER: keycloak
+      # MYSQL_PASSWORD: 123456
+      # MYSQL_DATABASE: keycloak
     ports:
       - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - backend
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
 
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.0
@@ -38,6 +44,95 @@ services:
     networks:
       - backend
 
+  discoveryserver:
+    build:
+      context: .
+      dockerfile: discoveryserver/Dockerfile
+    image: "${DOCKER_USERNAME}/discoveryserver:latest"
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+  apigateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discoveryserver
+
+  accountservice:
+    build:
+      context: .
+      dockerfile: account/Dockerfile
+    ports:
+      - "9001:9001"
+    networks:
+      - backend
+    depends_on:
+      - discoveryserver
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/accountservice
+      - SPRING_DATASOURCE_USERNAME=account_admin
+      - SPRING_DATASOURCE_PASSWORD=123456
+  testservice:
+    build:
+      context: .
+      dockerfile: testservice/Dockerfile
+    ports:
+      - "9002:9002"
+    networks:
+      - backend
+    depends_on:
+      - discoveryserver
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/testservice
+      - SPRING_DATASOURCE_USERNAME=test_admin
+      - SPRING_DATASOURCE_PASSWORD=123456
+  attemptservice:
+    build:
+      context: .
+      dockerfile: attempt/Dockerfile
+    ports:
+      - "9003:9003"
+    networks:
+      - backend
+    depends_on:
+      - discoveryserver
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/attemptservice
+      - SPRING_DATASOURCE_USERNAME=attempt_admin
+      - SPRING_DATASOURCE_PASSWORD=123456
+  fileservice:
+    build:
+      context: .
+      dockerfile: fileservice/Dockerfile
+    ports:
+      - "9004:9004"
+    networks:
+      - backend
+    depends_on:
+      - discoveryserver
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fileservice
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+
 networks:
   backend:
     driver: bridge
+volumes:
+  mysql_data:

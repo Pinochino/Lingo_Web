@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+      routes:
+        - id: account-service
+          uri: lb://account-service
+          predicates:
+            - Path=/api/v1/account/**
+        - id: test-service
+          uri: lb://test-service
+          predicates:
+            - Path=/api/v1/test/**, /api/v1/answer/**, /api/v1/resource/**, /api/v1/question/**
+        - id: attempt-service
+          uri: lb://attempt-service
+          predicates:
+            - Path=/api/v1/attempt/**
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/api/v1/file/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/Lingo
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discoveryserver:8761/eureka/
+idp:
+  url: http://keycloak:8080
+  client-id: Lingo
+  client-secret: JK7Mc23PlhXx3TSCVlC3wKhq7PmohD8I
+  realm: Lingo
