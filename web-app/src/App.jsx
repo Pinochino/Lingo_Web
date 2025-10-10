@@ -61,9 +61,9 @@ function App() {
         {
           path: "admin",
           element: (
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <AdminLayout />
+            // </ProtectedRoute>
           ),
           children: [
             {

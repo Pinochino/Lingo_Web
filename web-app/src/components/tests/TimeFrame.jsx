@@ -16,6 +16,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
     const { test } = useSelector(state => state.test);
     const [timeRemaining, setTimeRemaining] = useState(0);
     const [timeLimitFormat, setTimeLimitFormat] = useState();
+    const [progress, setProgress] = useState(0);
     const [modalSubmit, setModalSubmit] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,6 +28,9 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             setTimeRemaining(test.timeLimit * 60);
         }
     }, [test]);
+    useEffect(() => {
+        setProgress(userAnswers?.filter(a => a.userAnswer !== "").length)
+    }, [userAnswers])
     useEffect(() => {
         const countDownInterval = setInterval(() => {
             setTimeRemaining(prev => {
@@ -85,9 +89,8 @@ const TimeFrame = ({ editMode, setEditMode }) => {
     };
 
     if (loading) return <Spin spinning={loading} fullscreen={true} />
-
     return (
-        <div className="w-full h-48 px-14 py-4 bg-gradient-to-r from-[#6a11cb] to-[#2575fc]">
+        <div className="w-full h-full px-14 py-4 bg-gradient-to-r from-[#6a11cb] to-[#2575fc]">
 
             <div className="flex justify-between items-center ">
                 <div className="flex gap-3 items-center">
@@ -95,7 +98,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
                     <p className="text-[#ffffff] font-semibold text-lg">English Proficiency Test</p>
                 </div>
 
-                {roles.includes("manage-users") && (
+                {(roles.includes("manage-users") || roles.length === 0) && (
                     <Button
                         className={`!text-xl !border-0 !text-[#ffffff] !p-5 flex justify-center items-center
       ${editMode ? "!bg-red-500 hover:!bg-red-600" : "!bg-amber-500 hover:!bg-amber-600"}`}
@@ -138,7 +141,7 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             <div className="mt-3">
                 <div className="flex justify-between items-center">
                     <p className="text-gray-200 text-[14px] mb-1 font-semibold">Overall Progress</p>
-                    <p className="text-[#ffffff] text-[14px] font-semibold">{userAnswers?.length}% Complete</p>
+                    <p className="text-[#ffffff] text-[14px] font-semibold">{progress}% Complete</p>
                 </div>
 
                 <Progress
