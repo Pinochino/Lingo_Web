@@ -31,7 +31,7 @@ const UserFormModal = ({ visible, onSubmit, onCancel, initialValues, loading }) 
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       title={isUpdateMode ? 'Cập nhật người dùng' : 'Tạo người dùng mới'}
       onCancel={onCancel}
       footer={[
@@ -49,7 +49,7 @@ const UserFormModal = ({ visible, onSubmit, onCancel, initialValues, loading }) 
           label="Tên tài khoản"
           rules={[{ required: true, message: 'Vui lòng nhập tên tài khoản!' }]}
         >
-          <Input />
+          <Input disabled={isUpdateMode} />
         </Form.Item>
 
         <Form.Item
@@ -57,17 +57,16 @@ const UserFormModal = ({ visible, onSubmit, onCancel, initialValues, loading }) 
           label="Email"
           rules={[{ required: true, message: 'Vui lòng nhập email!', type: 'email' }]}
         >
-          <Input />
+          <Input disabled={isUpdateMode} />
         </Form.Item>
 
-        <Form.Item
+        {!isUpdateMode && <Form.Item
           name="password"
           label="Mật khẩu"
           rules={[{ required: !isUpdateMode, message: 'Vui lòng nhập mật khẩu!' }]}
-          help={isUpdateMode ? 'Để trống nếu không muốn thay đổi' : ''}
         >
           <Input.Password />
-        </Form.Item>
+        </Form.Item>}
 
         <Form.Item
           name="roles"
@@ -80,13 +79,13 @@ const UserFormModal = ({ visible, onSubmit, onCancel, initialValues, loading }) 
           </Select>
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="enabled"
           label="Trạng thái"
           valuePropName="checked"
         >
           <Switch checkedChildren="Kích hoạt" unCheckedChildren="Vô hiệu hóa" />
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Modal>
   );

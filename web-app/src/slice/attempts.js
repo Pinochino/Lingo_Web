@@ -53,7 +53,7 @@ export const retrieveAttempt = createAsyncThunk(
       return res;
     } catch (err) {
       if (err.response && err.response.data) {
-        return rejectWithValue(err.response.data); // custom error từ backend
+        return rejectWithValue(err.response.data);
       }
       return rejectWithValue("Lỗi không xác định");
     }

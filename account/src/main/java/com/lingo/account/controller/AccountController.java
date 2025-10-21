@@ -5,10 +5,8 @@ import com.lingo.account.dto.request.ReqAccountGGDTO;
 import com.lingo.account.dto.request.ReqUpdateAccountDTO;
 import com.lingo.account.dto.response.ResAccountDTO;
 import com.lingo.account.dto.response.ResPaginationDTO;
-import com.lingo.account.model.Account;
 import com.lingo.account.service.AccountService;
 import com.lingo.common_library.exception.CreateUserException;
-import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,7 +44,7 @@ public class AccountController {
           @RequestParam(value = "to", defaultValue = "", required = false) Long to
   ) {
     return ResponseEntity.ok(this.accountService.getAllAccounts(
-            pageNo, pageSize, search, search, role, true, from, to
+            pageNo, pageSize, search, search, role, from, to
     ));
   }
 
@@ -68,6 +66,17 @@ public class AccountController {
   })
   public ResponseEntity<String> deleteAccount(@PathVariable String id) {
     this.accountService.deleteAccount(id);
+    return ResponseEntity.ok("Account deleted successfully");
+  }
+
+  @PostMapping("/enable")
+  @Operation(summary = "Delete account by id", description = "Return 200 if the account deleted successfully")
+  @ApiResponses({
+          @ApiResponse(responseCode = "200", description = "Account deleted", content = @Content(mediaType = "application/json")),
+          @ApiResponse(responseCode = "400", description = "Wrong/not valid accounts", content = @Content(mediaType = "application/json")),
+  })
+  public ResponseEntity<String> enableAccount(@RequestParam String id, @RequestParam boolean enable) {
+    this.accountService.updateEnableAccount(id, enable);
     return ResponseEntity.ok("Account deleted successfully");
   }
 

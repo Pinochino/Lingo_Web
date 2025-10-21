@@ -2,14 +2,14 @@
 import React from 'react';
 import { Table, Tag, Dropdown, Menu, Button, Space, Switch, Tooltip, Typography } from 'antd';
 import { EditOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 const { Text } = Typography;
 
-/**
- * Component "dumb" (presentational)
- * Nhận props: users, loading, và các handlers (onUpdate, onDelete, onToggleStatus)
- */
-const UserTable = ({ users, loading, onUpdate, onDelete, onToggleStatus }) => {
+
+const UserTable = ({ users, loading, onUpdate, onDelete, onToggleStatus, setFilters }) => {
+
+  const { meta } = useSelector(state => state.accounts);
 
   const columns = [
     {
@@ -41,21 +41,6 @@ const UserTable = ({ users, loading, onUpdate, onDelete, onToggleStatus }) => {
       key: 'email',
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'enabled',
-      key: 'enabled',
-      align: 'center',
-      width: 120,
-      render: (enabled, record) => (
-        <Tooltip title={enabled ? 'Đang kích hoạt (Click để vô hiệu hóa)' : 'Đã vô hiệu hóa (Click để kích hoạt)'}>
-          <Switch
-            checked={enabled}
-            onChange={() => onToggleStatus(record)}
-          />
-        </Tooltip>
-      ),
-    },
-    {
       title: 'Vai trò',
       dataIndex: 'roles',
       key: 'roles',
@@ -85,6 +70,31 @@ const UserTable = ({ users, loading, onUpdate, onDelete, onToggleStatus }) => {
           })}
         </Space>
       ),
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'enable',
+      key: 'enable',
+      align: 'center',
+      width: 120,
+      render: (enabled, record) => (
+        <Tooltip title={enabled ? 'Đang kích hoạt (Click để vô hiệu hóa)' : 'Đã vô hiệu hóa (Click để kích hoạt)'}>
+          <Switch
+            checked={enabled}
+            onChange={() => onToggleStatus(record)}
+          />
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Ngày tạo ',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (create) => (
+        <Text style={{ maxWidth: 150 }}>
+          {create?.split("T")[0] ?? "—"}
+        </Text>
+      )
     },
     {
       title: 'Hành động',
@@ -122,16 +132,25 @@ const UserTable = ({ users, loading, onUpdate, onDelete, onToggleStatus }) => {
   return (
     <Table
       columns={columns}
-      dataSource={users}
+      dataSource={users}   // dùng accounts từ state
       loading={loading}
       rowKey="keycloakId"
       scroll={{ x: 'max-content' }}
       pagination={{
-        pageSize: 10,
+        current: (meta.page ?? 0) + 1,        // AntD dùng 1-based index, API của bạn trả 0-based
+        pageSize: meta.pageSize,
+        total: meta.total,
         showSizeChanger: true,
-        pageSizeOptions: ['10', '20', '50']
+        pageSizeOptions: ['5', '10', '20', '50']
+      }}
+      onChange={(pagination) => {
+        setFilters({
+          pageNo: pagination.current - 1,
+          pageSize: pagination.pageSize
+        });
       }}
     />
+
   );
 };
 

@@ -34,9 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -87,13 +85,23 @@ public class AccountService {
                       .build());
 
       String userId = extractUserId(createAccountRes);
-      this.roleService.assignRole(userId, USER); // assign in keycloak
+      Account account = accountMapper.toModel(request, userId);
+
+      List<String> roleNames = request.getRoles().length > 0 && request.getRoles()[0] != null
+            ? Arrays.asList(request.getRoles())
+            : List.of(USER);
+
+      if (roleNames.size() > 1) {
+        this.roleService.assignRole(userId, roleNames);
+      } else {
+        this.roleService.assignRole(userId, roleNames);
+      }
+
+      List<Role> roles = this.roleRepository.findAllByNameIn(roleNames);
       log.info("KEYCLOAK, User created with id: {}", userId);
 
-      Account account = accountMapper.toModel(request, userId);
-      account.setRoles(Arrays.asList(roleRepository.findByName(USER)));
+      account.setRoles(roles);
       this.accountRepository.save(account);
-
       return accountMapper.toResDTO(account);
 
   }
@@ -110,7 +118,7 @@ public class AccountService {
           String username,
           String email,
           List<String> roles,
-          boolean enable,
+//          boolean enable,
           Long from , Long to
   ) {
 
@@ -124,7 +132,7 @@ public class AccountService {
     Specification<Account> spec = Specification.where(AccountSpecifications.hasUsername(username))
             .or(AccountSpecifications.hasEmail(email))
             .and(AccountSpecifications.hasRoles(roles))
-            .and(AccountSpecifications.isEnable(enable))
+//            .and(AccountSpecifications.isEnable(enable))
             .and(AccountSpecifications.createdBetween(from, to));
 
     Page<Account> accountPage = this.accountRepository.findAll(spec, pageable);
@@ -146,7 +154,15 @@ public class AccountService {
   }
 
   public void deleteAccount(String id) {
-    updateEnableAccount(id, false);
+    Account account = (Account) this.accountRepository.findByKeycloakId(id)
+            .orElseThrow(() -> new NotFoundException(Constants.ErrorCode.USER_NOT_FOUND));
+
+    try {
+      keycloak.realm(keycloakPropsConfig.getRealm()).users().delete(account.getKeycloakId());
+      this.accountRepository.delete(account);
+    } catch (Exception e) {
+      throw new NotFoundException(Constants.ErrorCode.ERROR_DELETING_ACCOUNT);
+    }
   }
 
   public void restoreAccount(String id) {
@@ -186,6 +202,8 @@ public class AccountService {
     }
   }
 
+
+
   public ResAccountDTO createAccountGG(ReqAccountGGDTO req) {
     return this.accountRepository.findByEmail(req.getEmail())
             .map(existingAccount -> {
@@ -199,7 +217,7 @@ public class AccountService {
               account.setEnable(true);
               account.setUsername(req.getEmail());
               this.accountRepository.save(account);
-              this.roleService.assignRole(req.getSub(), USER); // assign in keycloak
+              this.roleService.assignRole(req.getSub(), Collections.singletonList(USER)); // assign in keycloak
               log.info("Created new account for email {}", req.getEmail());
               return accountMapper.toResDTO(account);
             });

@@ -5,23 +5,13 @@ import com.lingo.account.model.Account;
 import com.lingo.account.model.Role;
 import com.lingo.account.repository.AccountRepository;
 import com.lingo.account.repository.RoleRepository;
-import com.lingo.account.utils.KeycloakUtils;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -149,14 +139,14 @@ public class RoleService {
 
   }
 
-  public void assignRole(String userId, String roleName) {
-    assignRoles(userId, Collections.singletonList(roleName));
+  public void assignRole(String userId, List<String> roleName) {
+    assignRoles(userId, roleName);
   }
 
 
   public void assignRoleToAccount(String keycloakId, String roleName) {
     assignRolesToAccount(keycloakId, Collections.singletonList(roleName));
   }
-  
+
 
 }
