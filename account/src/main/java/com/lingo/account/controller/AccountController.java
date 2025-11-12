@@ -6,7 +6,9 @@ import com.lingo.account.dto.request.ReqAvatarDTO;
 import com.lingo.account.dto.request.ReqUpdateAccountDTO;
 import com.lingo.account.dto.response.ResAccountDTO;
 import com.lingo.account.dto.response.ResPaginationDTO;
+import com.lingo.account.repository.MessageService;
 import com.lingo.account.service.AccountService;
+import com.lingo.account.service.KeycloakService;
 import com.lingo.account.service.OtpService;
 import com.lingo.common_library.exception.CreateUserException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +31,7 @@ import java.util.List;
 public class AccountController {
   private final AccountService accountService;
   private final OtpService otpService;
+  private final KeycloakService keycloakService;
 
   @PostMapping
   public ResponseEntity<ResAccountDTO> createNewAccount(@RequestBody ReqAccountDTO request) throws CreateUserException {
@@ -108,9 +111,22 @@ public class AccountController {
   }
 
   @PostMapping("/send-otp")
-  public ResponseEntity<String> sendOTP(@RequestParam String email){
+  public ResponseEntity<String> sendOTP(@RequestParam String email, @RequestParam boolean resetPass){
     String otp = this.otpService.generateOtp();
-    this.accountService.sendOTP(email, otp);
+    this.accountService.sendOTP(email, otp, resetPass);
     return ResponseEntity.ok("OTP has been sent!");
   }
+
+  @PostMapping("/verify-otp")
+  public ResponseEntity<String> verifyOTP(@RequestParam String email, @RequestParam String otp){
+    this.otpService.verifyOtp(email, otp);
+    return ResponseEntity.ok("OTP has been verified!");
+  }
+
+  @PutMapping("/reset-password")
+  public ResponseEntity<String> resetPass(@RequestParam String email, @RequestParam String password){
+    this.keycloakService.resetPassword(email, password);
+    return ResponseEntity.ok("Password has been reset!");
+  }
+
 }

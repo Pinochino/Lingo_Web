@@ -11,6 +11,7 @@ import com.lingo.account.model.Account;
 import com.lingo.account.model.Role;
 import com.lingo.account.repository.AccountRepository;
 import com.lingo.account.repository.AccountSpecifications;
+import com.lingo.account.repository.MessageService;
 import com.lingo.account.repository.RoleRepository;
 import com.lingo.account.utils.Constants;
 import com.lingo.common_library.exception.CreateUserException;
@@ -40,6 +41,8 @@ public class AccountService {
   private final RoleRepository roleRepository;
   private final KeycloakService keycloakService;
   private final OtpService otpService;
+  private final MessageService messageService;
+
   private final String USER = "USER";
 
   public ResAccountDTO createNewAccount(ReqAccountDTO request) throws CreateUserException, OtpException {
@@ -57,16 +60,21 @@ public class AccountService {
       log.info("KEYCLOAK, User created with id: {}", userId);
       account.setRoles(roles);
       this.accountRepository.save(account);
+      messageService.sendMessage(account);
       return accountMapper.toResDTO(account);
     } catch (Exception e ) {
       throw new CreateUserException("Error while creating new user: ", e.getMessage());
     }
   }
 
-  public void sendOTP(String email, String OTP) {
-    if (this.accountRepository.findByEmail(email).isPresent()){
+  public void sendOTP(String email, String OTP, boolean resetPass) {
+    if (!resetPass && this.accountRepository.findByEmail(email).isPresent()){
       throw new CreateUserException(Constants.ErrorCode.EMAIL_ALREADY_EXITED);
     }
+    if (resetPass && this.accountRepository.findByEmail(email).isEmpty()){
+      throw new CreateUserException(Constants.ErrorCode.USER_NOT_FOUND);
+    }
+
     this.otpService.sendOtp(email, OTP);
   }
 
