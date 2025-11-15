@@ -90,13 +90,13 @@ public class NotificationService {
   public void handleBroadcastNotificationMessage(ReqBroadcast req){
     NotificationType type;
     try {
-      type = this.notificationTypeService.getNotificationTypeByName(req.getTypeName());
+      type = this.notificationTypeService.checkIfNotificationTypeNotExistsById(req.getNotificationTypeId());
     } catch (Exception e) {
-      log.error("NotificationType not found: '{}' ", req.getTypeName());
+      log.error("NotificationType not found: '{}' ", req.getNotificationTypeId());
       return;
     }
 
-    List<UserNotificationSettings> allUsers = this.userSettingsService.getAllSettingsForType(req.getTypeName());
+    List<UserNotificationSettings> allUsers = this.userSettingsService.getAllSettingsForType(type.getName());
 
     for(UserNotificationSettings us : allUsers){
       if (us.isAppEnabled() || us.isEmailEnabled()) {
@@ -104,7 +104,7 @@ public class NotificationService {
                 us.getUserId(),
                 req.getTitle(),
                 type.getId(),
-                req.getTypeName(),
+                type.getName(),
                 req.getMessage()
         );
         this.rabbitTemplate.convertAndSend(notificationQueue, individualReq);

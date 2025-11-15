@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReqBroadcast {
-  private String typeName;
+  private long notificationTypeId;
   private String title;
   private String message;
 }
