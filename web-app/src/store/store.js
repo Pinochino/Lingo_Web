@@ -8,11 +8,17 @@ import questionReducer from "../slice/questions";
 import answerReducer from "../slice/answers";
 import fileReducer from "../slice/files";
 import resourceReducer from "../slice/resource";
+
+import chatReducer from "../slice/chat";
+import commentReducer from "../slice/commentSlice"
+
 import notificationSlice from "../slice/notifications";
 import settingsSlice from "../slice/notificationSettings";
+
 const reducer = {
     test: testReducer,
     questions: questionReducer,
+    chat: chatReducer,
     answers: answerReducer,
     file: fileReducer,
     resource: resourceReducer,
@@ -20,8 +26,11 @@ const reducer = {
     tests: testListSlice,
     attempts: attemptSlice,
     accounts: accountSlice,
+
+    comments: commentReducer,
     notifications: notificationSlice,
     settings: settingsSlice
+
 }
 export const store = configureStore({
     reducer: reducer,
