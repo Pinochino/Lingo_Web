@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7807224a-69f2-4995-954d-4271220bc1ae" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/dto/request/RequestCommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/dto/request/RequestCommentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/dto/request/RequestReplyDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/dto/request/RequestReplyDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/model/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/lingo/account/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/lingo/account/controller/AccountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/lingo/account/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/lingo/account/service/AccountService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/commentservice/src/main/java/com/lingo/commentservice/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testservice/src/main/java/com/lingo/testservice/service/TestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/testservice/src/main/java/com/lingo/testservice/service/TestService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,8 +191,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.CommentserviceApplication" />
-        <item itemvalue="Application.NotificationserviceApplication" />
         <item itemvalue="Application.AccountApplication" />
+        <item itemvalue="Application.NotificationserviceApplication" />
         <item itemvalue="Application.ChatbotApplication" />
         <item itemvalue="Application.FileserviceApplication" />
       </list>
