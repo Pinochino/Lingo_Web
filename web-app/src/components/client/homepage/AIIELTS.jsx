@@ -120,7 +120,7 @@ const AIIELTS = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2.5 rounded-lg font-medium btn-hover"
+                className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2.5 rounded-lg font-medium btn-hover academic-button"
               >
                 Academic
               </button>
@@ -142,7 +142,7 @@ const AIIELTS = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-900 text-white px-6 py-2.5 rounded-lg font-medium btn-hover"
+                className="bg-blue-600 hover:bg-blue-900 text-white px-6 py-2.5 rounded-lg font-medium btn-hover academic-button"
               >
                 Academic
               </button>
