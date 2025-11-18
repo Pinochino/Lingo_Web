@@ -44,16 +44,16 @@ export default function Chatbot() {
 
   const userId = useSelector((state) => state.authentication?.user?.id);
   const [conversationId, setConversationId] = useState("");
-  
+
   useEffect(() => {
     if (userId) {
       setConversationId(userId)
     }
     setConversationId(uuidv4())
   }, []);
-  
+
   console.log("conversationId", conversationId)
-  
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -221,7 +221,7 @@ export default function Chatbot() {
           {/* Input Area */}
           <div className="p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
             <div className="text-center text-xs text-gray-400 mb-2">
-              Powered by <span className="font-semibold text-gray-500">LexiBot</span> — AI may occasionally make mistakes.
+              Powered by <span className="font-semibold text-gray-500">Lingo</span> — AI may occasionally make mistakes.
             </div>
 
             {/* File Preview */}
