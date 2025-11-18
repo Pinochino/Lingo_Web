@@ -29,11 +29,11 @@ import RootLayout from './layouts/RouteLayout';
 import Analytics from './pages/user/Analytics';
 import Profile from './pages/user/Profile';
 import UserDetailPage from './pages/admin/UserDetailPage';
-import IeltsListListening from './pages/tests/IeltsListListening';
-import IeltsListReading from './pages/tests/IeltsListReading';
-import IeltsListSpeaking from './pages/tests/IeltsListSpeaking';
-import IeltsListWriting from './pages/tests/IeltsListWriting';
-import AIAssessmentPage from './pages/tests/AIAssessmentPage';
+import IeltsListListening from './pages-ATI/IeltsListListening';
+import IeltsListReading from './pages-ATI/IeltsListReading';
+import IeltsListSpeaking from './pages-ATI/IeltsListSpeaking';
+import IeltsListWriting from './pages-ATI/IeltsListWriting';
+import AIAssessmentPage from './pages-ATI/AIAssessmentPage';
 import SpeakingTestPage from './pages-ATI/SpeakingTestPage';
 import SpeakingResultPage from './pages-ATI/SpeakingResultPage';
 import WritingTestPage from './pages-ATI/WritingTestPage';
@@ -103,15 +103,19 @@ function App() {
               element: <Profile />,
             },
             {
-              path: "writing-test/:id",
+              path: "tests/writing/:id/:title",
               element: <WritingTestPage />,
             },
             {
-              path: "writing-test",
+              path: "tests/writing",
               element: <WritingTestPage />,
             },
             {
-              path: "writing-result/:id",
+              path: "tests/writing/:id/:title/results/:attemptId",
+              element: <WritingResultPage />,
+            },
+            {
+              path: "tests/writing/results/practice",
               element: <WritingResultPage />,
             },
           ]
@@ -169,11 +173,11 @@ function App() {
           ],
         },
         {
-          path: "speaking-test/:testId",
+          path: "tests/speaking/:testId/:title",
           element: <SpeakingTestPage />,
         },
         {
-          path: "speaking-result/:attemptId",
+          path: "tests/speaking/:testId/:title/results/:attemptId",
           element: <SpeakingResultPage />,
         }
       ]

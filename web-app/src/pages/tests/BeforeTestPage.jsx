@@ -17,19 +17,74 @@ import BoxComment from "../../components/tests/BoxComment";
 import RightSider from "../../components/tests/RightSider";
 import HistoryAttempts from "../../components/tests/BeforePage/HistoryAttempts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState, useRef } from "react";
 import { retrieveCommentsOfTest } from "../../slice/commentSlice";
+import { retrieveSingleTest } from "../../slice/tests";
 
 const BeforeTestPage = () => {
   const { Text } = Typography;
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [testInfo, setTestInfo] = useState(null);
   const dispatch = useDispatch();
+<<<<<<< HEAD
+  const { commentOfTest } = useSelector(state => state.comments);
   useEffect(() => {
     dispatch(retrieveCommentsOfTest(id))
-  }, [])
+  }, [id, dispatch])
+
+  useEffect(() => {
+    dispatch(retrieveSingleTest(id))
+      .unwrap()
+      .then((response) => {
+        console.log(response);
+        setTestInfo(response);
+      });
+  }, [dispatch, id]);
+
+  const hasScrolled = useRef(false);
+  const { commentOfTest, loading } = useSelector((state) => state.comments);
+
+  useEffect(() => {
+    const scrollToCommentId = location.state?.scrollToCommentId;
+
+    if (scrollToCommentId && !hasScrolled.current && !loading && commentOfTest.length > 0) {
+
+      const attemptScroll = (attempts = 0, maxAttempts = 15) => {
+        const commentElement = document.getElementById(scrollToCommentId);
+
+        if (commentElement) {
+
+          setTimeout(() => {
+            commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            commentElement.style.transition = 'background-color 0.3s ease';
+
+            setTimeout(() => {
+              commentElement.style.backgroundColor = '';
+            }, 2500);
+          }, 100);
+
+          hasScrolled.current = true;
+        } else if (attempts < maxAttempts) {
+
+          setTimeout(() => {
+            attemptScroll(attempts + 1, maxAttempts);
+          }, 200);
+        }
+      };
+
+      setTimeout(() => attemptScroll(), 300);
+    }
+
+    return () => {
+      if (location.state?.scrollToCommentId) {
+        hasScrolled.current = false;
+      }
+    };
+  }, [location.state, loading, commentOfTest]);
 
   const handleDoTest = () => navigate(location.pathname + "/doTests");
 
@@ -50,33 +105,33 @@ const BeforeTestPage = () => {
                 <div>
                   <div className="flex items-center space-x-2 mb-2">
                     <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                      #TOEIC
+                      #{testInfo?.type}
                     </span>
                     <Button color="default" variant="text">
                       <HeartOutlined className="text-xl text-shadow-gray-200" />
                     </Button>
                   </div>
                   <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                    TOEIC Reading Practice Test 1
+                    {testInfo?.title?.replace(/_/g, " ")}
                   </h1>
                   <Space size="large" className="text-sm text-gray-600">
                     <Text>
-                      <ClockCircleFilled style={{ marginRight: 4 }} /> 75 phút
+                      <ClockCircleFilled style={{ marginRight: 4 }} /> {testInfo?.timeLimit} minutes
                     </Text>
                     <Text>
-                      <QuestionCircleFilled style={{ marginRight: 4 }} /> 100 câu
+                      <QuestionCircleFilled style={{ marginRight: 4 }} /> {testInfo?.numOfQuestions} questions
                       hỏi
                     </Text>
                     <Text>
-                      <UnorderedListOutlined style={{ marginRight: 4 }} /> 3 phần
-                      thi
+                      <UnorderedListOutlined style={{ marginRight: 4 }} />
+                      {testInfo?.type === "TOEIC" ? "7 parts" : "4 parts"}
                     </Text>
                     <Text>
-                      <WechatFilled style={{ marginRight: 4 }} /> 24 bình luận
+                      <WechatFilled style={{ marginRight: 4 }} /> {commentOfTest.length} comments
                     </Text>
-                    <Text>
+                    {/* <Text>
                       <TeamOutlined style={{ marginRight: 4 }} /> 1,234 lượt làm
-                    </Text>
+                    </Text> */}
                   </Space>
                 </div>
                 <Button color="default" variant="text" className="!px-0">
@@ -90,11 +145,10 @@ const BeforeTestPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      Sẵn sàng làm bài?
+                      Ready to take the test?
                     </h3>
                     <p className="text-gray-600 text-sm mb-4">
-                      Đề thi mô phỏng chính thức TOEIC Reading với 100 câu hỏi trong
-                      75 phút
+                      Official simulated {testInfo?.type} test with {testInfo?.numOfQuestions} questions in {testInfo?.timeLimit} minutes
                     </p>
                     <div className="flex items-start !space-x-4 flex-col md:flex-row md:items-center gap-3 md:gap-0">
                       <Button
@@ -104,12 +158,11 @@ const BeforeTestPage = () => {
                         onClick={handleDoTest}
                       >
                         <CaretRightFilled className="text-xl text-shadow-gray-200" />{" "}
-                        Bắt đầu làm bài
+                        Start the test
                       </Button>
-                      <Button variant="solid" size="large" className="!bg-[FFFFFF]">
-                        <EyeFilled className="text-xl text-shadow-gray-200" /> Xem
-                        đáp án
-                      </Button>
+                      {/* <Button variant="solid" size="large" className="!bg-[FFFFFF]">
+                        <EyeFilled className="text-xl text-shadow-gray-200" /> View answers
+                      </Button> */}
                     </div>
                   </div>
 
@@ -124,12 +177,12 @@ const BeforeTestPage = () => {
                   <div className="flex items-center gap-1">
                     <BulbFilled className="!text-yellow-600" />
                     <div className="text-sm text-yellow-800">
-                      <strong>Lưu ý:</strong> Hãy chuẩn bị đầy đủ 75 phút để hoàn
-                      thành bài thi. Bạn có thể tạm dừng và tiếp tục sau.
+                      <strong>Note:</strong> Please prepare the full {testInfo?.timeLimit} minutes to complete the test. You can pause and continue later.
                     </div>
                   </div>
                 </div>
               </Card>
+
             </Card>
 
             {/* comment section */}
