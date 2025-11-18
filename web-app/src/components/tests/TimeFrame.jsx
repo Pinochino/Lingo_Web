@@ -60,10 +60,11 @@ const TimeFrame = ({ editMode, setEditMode }) => {
             const attemptId = await dispatch(
                 createAttempts({
                     quizId: test?.id || null,
+                    testTitle: test?.title || null,
                     userId: user?.sub || null,
                     timeTaken,
                     type: test?.type || null,
-                    field: ["Listening", "Reading"],
+                    field: test?.category ? [test.category] : ["Listening", "Reading"],
                     answers: _.map(userAnswers, (a) => _.omit(a, "questionNumber")),
                 })
             ).unwrap();

@@ -12,7 +12,7 @@ import { retrieveQuestionForTest } from "../slice/questions";
 
 
 function SpeakingTestPage() {
-  const { testId } = useParams();
+  const { testId, title } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.authentication);
@@ -285,6 +285,7 @@ function SpeakingTestPage() {
 
       const attemptData = {
         quizId: quizId,
+        testTitle: title,
         userId: userId,
         timeTaken: totalElapsedTime,
         type: "IELTS",

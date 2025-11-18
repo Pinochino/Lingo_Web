@@ -103,15 +103,15 @@ function App() {
               element: <Profile />,
             },
             {
-              path: "writing-test/:id",
+              path: "tests/writing/:id/:title",
               element: <WritingTestPage />,
             },
             {
-              path: "writing-test",
+              path: "tests/writing",
               element: <WritingTestPage />,
             },
             {
-              path: "writing-result/:id",
+              path: "tests/writing/:id/:title/results/:attemptId",
               element: <WritingResultPage />,
             },
           ]
@@ -169,11 +169,11 @@ function App() {
           ],
         },
         {
-          path: "speaking-test/:testId",
+          path: "tests/speaking/:testId/:title",
           element: <SpeakingTestPage />,
         },
         {
-          path: "speaking-result/:attemptId",
+          path: "tests/speaking/:testId/:title/results/:attemptId",
           element: <SpeakingResultPage />,
         }
       ]

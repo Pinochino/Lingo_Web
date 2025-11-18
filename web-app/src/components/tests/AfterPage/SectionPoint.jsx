@@ -14,7 +14,7 @@ const SectionPoint = ({ skill, score, total, percent }) => {
         <div>
           <h4 className="font-semibold text-gray-800">{skill}</h4>
           <div className={`text-2xl font-bold ${textColor}`}>
-            {score}/{total}
+            {score.toFixed(1)}/{total.toFixed(1)}
           </div>
         </div>
       </div>

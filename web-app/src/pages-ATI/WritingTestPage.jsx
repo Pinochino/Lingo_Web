@@ -11,7 +11,7 @@ function WritingTestPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id: testId } = useParams();
+  const { id: testId, title } = useParams();
 
   const isLockMode = !!testId;
 
@@ -73,6 +73,7 @@ function WritingTestPage() {
 
         const attemptData = {
           quizId: quizId,
+          testTitle: title,
           userId: userId,
           timeTaken: 3600,
           type: "IELTS",

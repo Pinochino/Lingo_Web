@@ -45,7 +45,7 @@ const SingleComment = ({
       day: "numeric",
     });
   };
-  console.log("current user", currentUser)
+  // console.log("current user", currentUser)
 
   return (
     <div className={`${isReply ? "ml-12 mt-4" : ""}`}>

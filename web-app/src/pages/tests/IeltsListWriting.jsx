@@ -36,9 +36,7 @@ const FileTextIcon = () => (
   </svg>
 );
 
-// --- Component Card Đề thi (Theme: Purple) ---
 const TestCard = ({ test }) => {
-  // Tính toán progress dựa trên attempts
   const progress = test.attempts > 0 ? Math.min((test.attempts / 5) * 100, 100) : 0;
 
   return (
@@ -56,7 +54,7 @@ const TestCard = ({ test }) => {
         {Math.round(progress)}%
       </div>
       <Link
-        to={`/writing-test/${test.id}`}
+        to={`/tests/writing/${test.id}/${test.title}`}
         className="w-full !bg-orange-600 hover:!bg-orange-700 !text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition duration-200"
       >
         <LightningIcon />

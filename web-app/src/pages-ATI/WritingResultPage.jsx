@@ -16,7 +16,7 @@ export default function WritingResultPage() {
   // (Đổi tên cờ: cờ này có nghĩa là "Đã xử lý xong")
   const [isProcessed, setIsProcessed] = useState(false);
 
-  const { id: attemptId } = useParams();
+  const { attemptId } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
 
