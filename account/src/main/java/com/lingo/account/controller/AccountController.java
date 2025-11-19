@@ -85,6 +85,7 @@ public class AccountController {
     return ResponseEntity.ok(this.accountService.getAccount(id));
   }
 
+
   @GetMapping("/getByUsername/{username}")
   @Operation(summary = "Find account by username", description = "Return 200 if getting all account successfully")
   @ApiResponses({
@@ -97,6 +98,17 @@ public class AccountController {
     return ResponseEntity.ok(this.accountService.getAccountByUsername(username));
   }
 
+  @GetMapping("/getByEmail/{email}")
+  @Operation(summary = "Find account by email", description = "Return 200 if getting all account successfully")
+  @ApiResponses({
+          @ApiResponse(responseCode = "200", description = "Account found", content = @Content(mediaType = "application/json")),
+          @ApiResponse(responseCode = "400", description = "Wrong/not valid account", content = @Content(mediaType = "application/json")),
+  })
+  public ResponseEntity<ResAccountDTO> getAccountByEmail(
+          @Parameter(description = "Username to search for", required = true, example = "john_doe")
+          @PathVariable String email){
+    return ResponseEntity.ok(this.accountService.getAccountByEmail(email));
+  }
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete account by id", description = "Return 200 if the account deleted successfully")
   @ApiResponses({
@@ -215,5 +227,6 @@ public class AccountController {
     this.keycloakService.resetPassword(req.getEmail(), req.getPassword());
     return ResponseEntity.ok("Password has been reset!");
   }
+
 
 }

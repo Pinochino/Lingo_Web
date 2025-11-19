@@ -1,19 +1,17 @@
-package com.lingo.common_library.dto;
+package com.lingo.chatbot.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
-public class ReqNotificationPost {
-    String userId;
+public class NotifyRequest {
     String title;
     long notificationTypeId;
     String typeName;
     String message;
     String url;
-
 }

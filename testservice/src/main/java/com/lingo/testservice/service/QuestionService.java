@@ -113,7 +113,7 @@ class QuestionServiceImpl implements QuestionService {
             if (question.getResource() != null) {
                 MediaResource resource = question.getResource();
                 resource.setResourceContent(dto.getResourceContent());
-//                resourceRepository.save(resource);
+//                resourceRepository.save(resource);bo
                 question.setResource(resource);
             }
 
