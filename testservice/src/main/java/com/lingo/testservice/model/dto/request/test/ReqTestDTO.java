@@ -1,5 +1,6 @@
 package com.lingo.testservice.model.dto.request.test;
 
+import com.lingo.testservice.utils.enums.TestCategory;
 import com.lingo.testservice.utils.enums.TestType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class ReqTestDTO {
     int numOfQuestions;
     @Enumerated(EnumType.STRING)
     TestType type;
+    TestCategory category;
 
     // save test info first and then save question, resource after so that do not need to assign question and test object
 //    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
